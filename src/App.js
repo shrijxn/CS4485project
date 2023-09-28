@@ -6,37 +6,93 @@ import './App.css';
 import TutorLogin from './components/TutorLogin.js';
 import StudentLogin from './components/StudentLogin.js';
 import StudentDashboard from './components/StudentDashboard.js';
+import Button from '@mui/material/Button';
+import { createTheme } from '@mui/system';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
+
+// Define the theme
+const defaultTheme = createTheme({
+    palette: {
+        primary: {
+            main: '#1976d2', // Main shade of blue color
+        },
+        secondary: {
+            main: '#e91e63', // Main shade of pink color
+        },
+    },
+});
 
 function App() {
-  return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          <h2>UTD Online Tutoring Platform</h2>
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/Tutorlogin" element={<TutorLogin />} />
-            <Route path="/Studentlogin" element={<StudentLogin />} />
-            <Route path="/StudentDashboard" element={<StudentDashboard />} />
-          </Routes>
-        </header>
-      </div>
-    </Router>
-  );
+    return (
+        <Router>
+            <div className="App">
+                <header className="App-header">
+                    <h2>UTD Online Tutoring Platform</h2>
+                    <Routes>
+                        <Route path="/" element={<MainPage />} />
+                        <Route path="/Tutorlogin" element={<TutorLogin />} />
+                        <Route path="/Studentlogin" element={<StudentLogin />} />
+                        <Route path="/StudentDashboard" element={<StudentDashboard />} />
+                    </Routes>
+                    {/* Footer */}
+                    <footer style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '10px',
+                        position: 'absolute',
+                        bottom: '0',
+                        width: 'calc(100% - 20px)',
+                        backgroundColor: 'transparent',
+                        color: 'white',
+                    }}>
+                        <div style={{ fontSize: '12px' }}>
+                            Copyright C UTDallas CS 4485 Project
+                        </div>
+                        <div style={{ textAlign: 'right', fontSize: '12px' }}>
+                            <a href="https://github.com/shrijxn/CS4485project/tree/master"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ textDecoration: 'none', color: 'white' }}>
+                                Github
+                            </a>
+                        </div>
+                    </footer>
+                </header>
+            </div>
+        </Router>
+    );
 }
 
+
+
+
 function MainPage() {
-  return (
-    <div>
-      <Link to="/Tutorlogin">
-        <button>Tutor</button>
-      </Link>
-      <Link to="/Studentlogin">
-        <button>Student</button>
-      </Link>
-    </div>
-  );
+    return (
+        <div>
+            <Link to="/Tutorlogin" style={{ textDecoration: 'none', marginRight: '16px' }}>
+                <Button
+                    startIcon={<ArrowBackIosIcon />}
+                    variant="contained"
+                    color="primary"
+                    sx={{ mr: 2 }} // Adds margin to the right of the button
+                >
+                    Tutor
+                </Button>
+            </Link>
+            <Link to="/Studentlogin" style={{ textDecoration: 'none' }}>
+                <Button
+                    endIcon={<ArrowForwardIosIcon />}
+                    variant="contained"
+                    color="secondary"
+                >
+                    Student
+                </Button>
+            </Link>
+        </div>
+    );
 }
+
 
 export default App;
