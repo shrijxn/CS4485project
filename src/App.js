@@ -3,8 +3,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; 
 import './App.css';
+import LandingPage from './components/LandingPage.js';
 import TutorLogin from './components/TutorLogin.js';
 import StudentLogin from './components/StudentLogin.js';
+import TutorSignup from './components/TutorSignup.js';
+import StudentSignup from './components/StudentSignup.js';
 import StudentDashboard from './components/StudentDashboard.js';
 import Button from '@mui/material/Button';
 import { createTheme } from '@mui/system';
@@ -32,8 +35,11 @@ function App() {
                     <h2>UTD Online Tutoring Platform</h2>
                     <Routes>
                         <Route path="/" element={<MainPage />} />
-                        <Route path="/Tutorlogin" element={<TutorLogin />} />
-                        <Route path="/Studentlogin" element={<StudentLogin />} />
+                        <Route path="/landing/:type" element={<LandingPage />} />
+                        <Route path="/StudentSignup" element={<StudentSignup />} />
+                        <Route path="/TutorSignup" element={<TutorSignup />} />
+                        <Route path="/StudentLogin" element={<StudentLogin />} />
+                        <Route path="/TutorLogin" element={<TutorLogin />} />
                         <Route path="/StudentDashboard" element={<StudentDashboard />} />
                     </Routes>
                     {/* Footer */}
@@ -71,17 +77,17 @@ function App() {
 function MainPage() {
     return (
         <div>
-            <Link to="/Tutorlogin" style={{ textDecoration: 'none', marginRight: '16px' }}>
+            <Link to="/landing/Tutor" style={{ textDecoration: 'none', marginRight: '16px' }}>
                 <Button
                     startIcon={<ArrowBackIosIcon />}
                     variant="contained"
                     color="primary"
-                    sx={{ mr: 2 }} // Adds margin to the right of the button
+                    sx={{ mr: 2 }}
                 >
                     Tutor
                 </Button>
             </Link>
-            <Link to="/Studentlogin" style={{ textDecoration: 'none' }}>
+            <Link to="/landing/Student" style={{ textDecoration: 'none' }}>
                 <Button
                     endIcon={<ArrowForwardIosIcon />}
                     variant="contained"
