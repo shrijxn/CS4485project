@@ -41,7 +41,7 @@ function StudentSignup() {
             .oneOf([Yup.ref('password'), null], 'Password confirmation does not match'),
     });
 
-    const handleSubmit = (values) => {
+    const handleLogin = (values) => {
         // You can perform signup logic here
         console.log('Form data submitted:', values);
         navigate('/StudentDashboard'); // Navigate to the student page after successful signup
@@ -53,7 +53,7 @@ function StudentSignup() {
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                onSubmit={handleSubmit}
+                onSubmit={handleLogin}
             >
                 <Form>
                     <div>

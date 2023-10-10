@@ -41,3 +41,13 @@
     transform: rotate(360deg);
   }
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.next-button {
+    margin-left: auto;
+}
