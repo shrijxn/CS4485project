@@ -9,6 +9,7 @@ import StudentLogin from './components/StudentLogin.js';
 import TutorSignup from './components/TutorSignup.js';
 import StudentSignup from './components/StudentSignup.js';
 import StudentDashboard from './components/StudentDashboard.js';
+import TutorDashboard from './components/TutorDashboard.js';
 import Button from '@mui/material/Button';
 import { createTheme } from '@mui/system';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -41,6 +42,7 @@ function App() {
                         <Route path="/StudentLogin" element={<StudentLogin />} />
                         <Route path="/TutorLogin" element={<TutorLogin />} />
                         <Route path="/StudentDashboard" element={<StudentDashboard />} />
+                        <Route path="/TutorDashboard" element={<TutorDashboard />} />
                     </Routes>
                     {/* Footer */}
                     <footer style={{
