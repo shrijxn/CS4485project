@@ -28,7 +28,7 @@ function Page1() {
                 <ErrorMessage name="password" component="div" className="error-message" />
             </div>
             <div>
-                <label htmlFor="confirmPassword">Confirm Password: </label>
+                <label htmlFor="confirmPassword">Re-enter Password: </label>
                 <Field type="password" id="confirmPassword" name="confirmPassword" />
                 <ErrorMessage name="confirmPassword" component="div" className="error-message" />
             </div>

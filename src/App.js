@@ -9,11 +9,17 @@ import StudentLogin from './components/StudentLogin.js';
 import TutorSignup from './components/TutorSignup.js';
 import StudentSignup from './components/StudentSignup.js';
 import StudentDashboard from './components/StudentDashboard.js';
+import StudentSelect from './components/StudentSelect.js';
+import StudentAppointment from './components/StudentAppointment.js';
+import StudentMyFavorites from './components/StudentMyFavorites.js';
+import StudentMySchedule from './components/StudentMySchedule.js';
 import TutorDashboard from './components/TutorDashboard.js';
+import TutorCalendar from './components/TutorCalendar.js';
 import Button from '@mui/material/Button';
 import { createTheme } from '@mui/system';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+
 
 
 // Define the theme
@@ -33,7 +39,7 @@ function App() {
         <Router>
             <div className="App">
                 <header className="App-header">
-                    <h2>UTD Online Tutoring Platform</h2>
+                    
                     <Routes>
                         <Route path="/" element={<MainPage />} />
                         <Route path="/landing/:type" element={<LandingPage />} />
@@ -42,7 +48,13 @@ function App() {
                         <Route path="/StudentLogin" element={<StudentLogin />} />
                         <Route path="/TutorLogin" element={<TutorLogin />} />
                         <Route path="/StudentDashboard" element={<StudentDashboard />} />
+                        <Route path="/StudentSelect" element={<StudentSelect />} />
+                        <Route path="/StudentAppointment" element={<StudentAppointment />} />
+                        <Route path="/StudentMyFavorites" element={<StudentMyFavorites />} />
+                        <Route path="/StudentMySchedule" element={<StudentMySchedule />} />
                         <Route path="/TutorDashboard" element={<TutorDashboard />} />
+                        <Route path="/TutorCalendar" element={<TutorCalendar />} />
+                        
                     </Routes>
                     {/* Footer */}
                     <footer style={{
@@ -79,6 +91,7 @@ function App() {
 function MainPage() {
     return (
         <div>
+            <h2>SLAAKS</h2>
             <Link to="/landing/Tutor" style={{ textDecoration: 'none', marginRight: '16px' }}>
                 <Button
                     startIcon={<ArrowBackIosIcon />}
