@@ -34,8 +34,22 @@ function TutorSignup() {
 
     const handleSubmit = (values) => {
         console.log('Form data submitted:', values);
-        navigate('/TutorDashboard');
-    };
+        if (values.firstName !== "" && values.lastName !== "" && values.email !== "" && values.password !== "") {
+            fetch('/api/register-student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({values})
+            }).then(response => response.text())
+                .then(data => {
+                    if (data !== 'Valid') {
+                        alert(data);
+                    }
+                });
+            navigate('/TutorDashboard');
+        }
+    }
 
 
 
