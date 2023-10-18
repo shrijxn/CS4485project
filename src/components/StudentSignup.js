@@ -15,13 +15,8 @@ function StudentSignup() {
         lastName: '',
         email: '',
         phone: '',
-        street: '',
-        city: '',
-        state: '',
-        zip: '',
         password: '',
         confirmPassword: '',
-        criminalRecord: '',
     };
 
     const validationSchema = Yup.object({

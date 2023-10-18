@@ -1,5 +1,6 @@
 // TutoringPage3.js
-import React from 'react';
+
+import React, { useState } from 'react'; // Import useState
 import { useFormikContext, Field, ErrorMessage } from 'formik';
 import Select from 'react-select';
 
@@ -45,6 +46,19 @@ const times = [
 
 function Page3() {
     const { errors, touched } = useFormikContext();
+
+    const customStyles = {
+        option: (provided, state) => ({
+            ...provided,
+            color: state.isFocused ? 'black' : 'black', 
+            fontSize: '12px', 
+        }),
+    };
+
+    // Define the state to manage dropdown openness
+    const [isSubjectsOpen, setSubjectsOpen] = useState(false);
+    const [isHoursOpen, setHoursOpen] = useState(false);
+
     return (
         <div>
             <div>
@@ -56,8 +70,14 @@ function Page3() {
                             isMulti
                             name="subjects"
                             options={subjects}
-                            onChange={(options) => form.setFieldValue(field.name, options)}
-                            styles={{color: 'black'}}
+                            styles={customStyles}
+                            menuIsOpen={isSubjectsOpen} // Use the state to control openness
+                            onMenuOpen={() => setSubjectsOpen(true)} // Open menu when it's clicked
+                            onMenuClose={() => setSubjectsOpen(false)} // Close menu when it's clicked outside or option is selected
+                            onChange={(options) => {
+                                form.setFieldValue(field.name, options);
+                                setSubjectsOpen(false); // Close menu after selection
+                            }}
                         />
                     )}
                 </Field>
@@ -72,7 +92,14 @@ function Page3() {
                             isMulti
                             name="availableHours"
                             options={times}
-                            onChange={(options) => form.setFieldValue(field.name, options)}
+                            styles={customStyles}
+                            menuIsOpen={isHoursOpen}
+                            onMenuOpen={() => setHoursOpen(true)}
+                            onMenuClose={() => setHoursOpen(false)}
+                            onChange={(options) => {
+                                form.setFieldValue(field.name, options);
+                                setHoursOpen(false);
+                            }}
                         />
                     )}
                 </Field>
