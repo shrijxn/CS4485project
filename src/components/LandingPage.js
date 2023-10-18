@@ -20,6 +20,7 @@ function LandingPage() {
                 </Button>
             </Link>
         </div>
+        
     );
 }
 

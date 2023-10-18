@@ -19,7 +19,7 @@ import Button from '@mui/material/Button';
 import { createTheme } from '@mui/system';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-
+import {data} from './components/Data.js'
 
 
 // Define the theme

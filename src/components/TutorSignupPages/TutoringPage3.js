@@ -52,10 +52,12 @@ function Page3() {
                 <Field name="subjects">
                     {({ field, form }) => (
                         <Select
+                           
                             isMulti
                             name="subjects"
                             options={subjects}
                             onChange={(options) => form.setFieldValue(field.name, options)}
+                            styles={{color: 'black'}}
                         />
                     )}
                 </Field>
