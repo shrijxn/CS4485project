@@ -12,5 +12,6 @@ import {data} from './Data.js'
 
 
 function StudentDashboard() {
+  return <div>Student's Favorite Tutor List</div>;
 }
 export default StudentDashboard;
