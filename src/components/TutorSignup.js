@@ -76,7 +76,7 @@ function TutorSignup() {
                                 </button>
                             )}
 
-                            {step < 3 ? (
+                            {step < 4 ? (
                                 <button
                                     type="button"
                                     onClick={() => {

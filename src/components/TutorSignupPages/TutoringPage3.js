@@ -78,6 +78,7 @@ function Page3() {
                                 form.setFieldValue(field.name, options);
                                 setSubjectsOpen(false); // Close menu after selection
                             }}
+                            onBlur={() => form.setFieldTouched(field.name, true)} // Mark the field as touched when it loses focus
                         />
                     )}
                 </Field>
@@ -100,6 +101,7 @@ function Page3() {
                                 form.setFieldValue(field.name, options);
                                 setHoursOpen(false);
                             }}
+                            onBlur={() => form.setFieldTouched(field.name, true)} // Mark the field as touched when it loses focus
                         />
                     )}
                 </Field>
