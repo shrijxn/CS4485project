@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify, redirect, session, u
 from flask_session import Session
 from flask_bcrypt import Bcrypt
 
+
 app = Flask(__name__)
 Session(app)
 bcrypt = Bcrypt(app)
@@ -48,7 +49,7 @@ def loginStudent():
         email = data.get('email', '')
         password = data.get('password', '')
 
-        # Find the student by email (this is a naive search for demonstration purposes)
+        # Find the student by email (this is a naive search for testing purpose)
         student = next((s for s in students if s['email'] == email), None)
         if not student:
             return jsonify({'status': 'error', 'message': 'No student found with this email'}), 404
