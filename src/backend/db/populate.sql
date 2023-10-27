@@ -1,13 +1,13 @@
-insert into Person (email, firstName, middleName, lastName, usertype)
-values ('example1@gmail.com', 'Harry','Julius', 'Batch', 'tutor'),
-('example2@gmail.com', 'Emily','James', 'Squire', 'tutor'),
-('example3@gmail.com', 'Sarah','Fred', 'Nguyen', 'student'),
-('example4@gmail.com', 'Chris','Edward', 'Khan', 'tutor'),
-('example5@gmail.com', 'Ethan','Robert', 'Smith', 'student'),
-('example6@gmail.com', 'Ryan','Mekk', 'To', 'tutor'),
-('example7@gmail.com', 'Justin','Peter', 'Knox', 'tutor'),
-('example8@gmail.com', 'Omar','Will', 'Calliope', 'student'),
-('example9@gmail.com', 'Kyle','David', 'Persephone', 'student');
+insert into Person (email, firstName, middleName, lastName, usertype, phonenum, criminal)
+values ('example1@gmail.com', 'Harry','Julius', 'Batch', 'tutor', '123-456-7890', 'false'),
+('example2@gmail.com', 'Emily','James', 'Squire', 'tutor', '321-654-0987', 'false'),
+('example3@gmail.com', 'Sarah','Fred', 'Nguyen', 'student', '000-000-0000', 'false'),
+('example4@gmail.com', 'Chris','Edward', 'Khan', 'tutor', '', 'false'),
+('example5@gmail.com', 'Ethan','Robert', 'Smith', 'student', '', 'false'),
+('example6@gmail.com', 'Ryan','Mekk', 'To', 'tutor', '111-111-1111', 'false'),
+('example7@gmail.com', 'Justin','Peter', 'Knox', 'tutor', '', 'false'),
+('example8@gmail.com', 'Omar','Will', 'Calliope', 'student', '222-222-2222', 'fals'),
+('example9@gmail.com', 'Kyle','David', 'Persephone', 'student', '', 'false');
 
 /*Generic Passwords using the SHA1 Hash, password shouldn't be stored in this case. Adjustments 
 will be done once we finalize hashing and direction
@@ -35,3 +35,13 @@ unhashed passwords that won't follow password requirements, testing purposes onl
 (example9@gmail.com, Wordpass)
 */
 
+insert into Subject_List (email, classname)
+values ('example1@gmail.com', 'History'),
+('example2@gmail.com', 'History'),
+('example4@gmail.com', 'History'),
+('example6@gmail.com', 'Math');
+
+insert into Favorite_Tutor (student_email, tutor_email)
+values ('example3@gmail.com', 'example1@gmail.com'),
+('example3@gmail.com', 'example2@gmail.com'),
+('example5@gmail.com', 'example6@gmail.com');
