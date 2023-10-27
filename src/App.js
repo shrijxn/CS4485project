@@ -1,20 +1,4 @@
 // App.js
-require("config/db");
-
-const express = require("express");
-const bodyParser = express.json;
-const cors = require ("cors");
-const routes = require("./routes");
-
-//const app = express();
-const app = express();
-
-app.use(cors());
-app.use(bodyParser());
-app.use("api/v1", routes);
-
-module.exports = app;
-
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; 
