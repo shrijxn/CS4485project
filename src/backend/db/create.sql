@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS Person CASCADE;
 DROP TABLE IF EXISTS Subject_List;
 DROP TABLE IF EXISTS About_Me;
 DROP TABLE IF EXISTS Tutor_Availability;
+DROP TABLE IF EXISTS Favorite_Tutor;
 DROP VIEW IF EXISTS tutors;
 DROP VIEW IF EXISTS students;
 
@@ -12,7 +13,8 @@ CREATE TABLE Person (
     middleName varchar(20) null,
     lastName varchar(20) not null,
     usertype varchar(7) not null,
-    criminal BOOLEAN not null,
+    phonenum varchar(14) null,
+    criminal varchar(6) not null,
 
     PRIMARY KEY (email)
 );
