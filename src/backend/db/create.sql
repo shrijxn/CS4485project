@@ -12,6 +12,7 @@ CREATE TABLE Person (
     middleName varchar(20) null,
     lastName varchar(20) not null,
     usertype varchar(7) not null,
+    criminal BOOLEAN not null,
 
     PRIMARY KEY (email)
 );
