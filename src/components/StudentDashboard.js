@@ -22,7 +22,7 @@ function StudentDashboard() {
                 <Button
                     style={{ backgroundColor: 'yellow', color: 'black' }}
                 >
-                    My Favorits
+                    My Favorites
                 </Button>
             </Link>
             <Link to="/StudentMySchedule" style={{ textDecoration: 'none' }}>

@@ -39,7 +39,21 @@ function StudentSignup() {
     const handleLogin = (values) => {
         // You can perform signup logic here
         console.log('Form data submitted:', values);
-        navigate('/StudentDashboard'); // Navigate to the student page after successful signup
+        if (values.firstName !== "" && values.lastName !== "" && values.email !== "" && values.password !== "") {
+            fetch('http://localhost:5000/api/register-student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ values })
+            }).then(response => response.text())
+                .then(data => {
+                    if (data !== 'Valid') {
+                        alert(data);
+                    }
+                });
+            navigate('/StudentDashboard');
+        }
     };
 
     return (

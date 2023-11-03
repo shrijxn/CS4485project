@@ -25,11 +25,25 @@ function TutorLogin() {
         .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, 'Password must contain at least one letter and one number') // Regex for the password condition
   });
 
-  const handleLogin = (values) => {
-     // You can perform login logic here
-     console.log('Form data submitted:', values);
-    navigate('/TutorDashboard'); // Navigate to the tutor page after successful signup
-  };
+    const handleLogin = (values) => {
+        // You can perform signup logic here
+        console.log('Form data submitted:', values);
+        if (values.firstName !== "" && values.lastName !== "" && values.email !== "" && values.password !== "") {
+            fetch('http://localhost:5000/api/login-tutor', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ values })
+            }).then(response => response.text())
+                .then(data => {
+                    if (data !== 'Valid') {
+                        alert(data);
+                    }
+                });
+            navigate('/TutorDashboard');
+        }
+    };
 
   return (
     <div>

@@ -22,7 +22,7 @@ function TutorSignup() {
         phone: '',
         street: '',
         city: '',
-        state: '',
+        state: '', 
         zip: '',
         password: '',
         confirmPassword: '',
@@ -35,7 +35,7 @@ function TutorSignup() {
     const handleSubmit = (values) => {
         console.log('Form data submitted:', values);
         if (values.firstName !== "" && values.lastName !== "" && values.email !== "" && values.password !== "") {
-            fetch('/api/register-student', {
+            fetch('http://localhost:5000/api/register-tutor', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
