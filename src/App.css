@@ -3,20 +3,33 @@
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  height: 600px;
+  position: absolute;
+  top: -200px;
+  left: -60px;
 }
+
 
 .error-message {
   font-size: 14px;
   color: red;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@keyframes App-logo-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-bounce 5s infinite;
+  }
+}
+
 
 .App-header {
   background-color: #282c34;
@@ -51,3 +64,21 @@
 .next-button {
     margin-left: auto;
 }
+
+@keyframes switchColor {
+  0% {
+    color: #1976d2; /* Primary color */
+  }
+  100% {
+    color: #e91e63; /* Secondary color */
+  }
+}
+
+.animated-text {
+  animation: switchColor 2s infinite alternate; /* Change 2s to the desired duration */
+  font-size: 1.5em; /* Adjust the size as needed */
+  margin-bottom: 20px; /* Spacing between text and buttons */
+}
+
+
+
