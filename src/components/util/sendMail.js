@@ -29,4 +29,4 @@ const sendMail = async (mailOptions) => {
     }
 };
 
-module.exports = sendEmail;
+module.exports = sendMail;
