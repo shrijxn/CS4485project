@@ -31,9 +31,9 @@ const sendOTP = async ({ email, subject, message, duration = 1}) => {
     const hashedOTP = await hashData(generateOTP);
     const newOTP = await new OTP({
         email,
-        otp:hashedOTP,
+        otp: hashedOTP,
         createdAt: Date.now(),
-        expiresAt: Date.now() + 3600000 * duration,
+        expiresAt: Date.now() + 3600000 * + duration,
     });
 
     const createdOTPRecord = await newOTP.save();
