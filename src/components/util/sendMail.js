@@ -3,14 +3,14 @@ const nodemailer = require("nodemailer");
 let transporter = nodemailer.createTransport({
     host: "smpt-mail.outlook.com",
     auth: { 
-        user: AUTH_EMAIL,
-        pass: AUTH_PASS,
+        user: 'onlinetutor123@hotmail.com',
+        pass: 'Finalproject123',
     },
     
 });
 
 //test trasporter
-transporter.verify((error, succcess) => {
+transporter.verify((error, success) => {
     if(error) {
         console.log(error);
     } else {

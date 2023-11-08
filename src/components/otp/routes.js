@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { sendOTP } = require("./controller");
+
+
 //request new verification otp
 router.post("/", async (req, res) => {
     try  {
@@ -9,7 +11,7 @@ router.post("/", async (req, res) => {
     const createdOTP = await sendOTP({
         email,
         subject,
-        messsage,
+        message,
         duration,
     });
      res.status(200).json(createdOTP);
@@ -19,3 +21,4 @@ router.post("/", async (req, res) => {
 
 });
 
+module.exports = router;
