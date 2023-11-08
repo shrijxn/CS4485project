@@ -20,7 +20,7 @@ transporter.verify((error, success) => {
 });
 
 
-const sendMail = async (mailOptions) => {
+const sendEMail = async (mailOptions) => {
     try {
         await transporter.sendMail(mailOptions);
         return;
@@ -29,4 +29,4 @@ const sendMail = async (mailOptions) => {
     }
 };
 
-module.exports = sendMail;
+module.exports = sendEMail;
