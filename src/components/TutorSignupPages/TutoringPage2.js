@@ -1,4 +1,4 @@
-// TutorSignup2
+// TutoringPage2.js
 
 import React from "react";
 import { useFormikContext, Field, ErrorMessage } from "formik";
@@ -7,6 +7,11 @@ function Page2() {
   const { errors, touched } = useFormikContext();
   return (
     <div>
+      <div>
+        <label htmlFor="phone">Phone (Optional): </label>
+        <Field type="text" id="phone" name="phone" />
+        <ErrorMessage name="phone" component="div" className="error-message" />
+      </div>
       <div>
         <label htmlFor="street">Street: </label>
         <Field type="text" id="street" name="street" />
