@@ -12,8 +12,10 @@ function StudentSignup() {
 
   const initialValues = {
     firstName: "",
+    middleName: "",
     lastName: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   };
@@ -24,6 +26,10 @@ function StudentSignup() {
     email: Yup.string()
       .matches(/^[^@]+@[^@]+\.[a-zA-Z]{3}$/, "Invalid email format")
       .required("Email is required"),
+    phone: Yup.string().matches(
+      /^\d{10}$/,
+      "Phone number must be exactly 10 digits"
+    ),
     password: Yup.string()
       .required("Password is required")
       .min(8, "Password should be at least 8 characters")
@@ -40,7 +46,6 @@ function StudentSignup() {
   });
 
   const handleLogin = (values) => {
-    // You can perform signup logic here
     console.log("Form data submitted:", values);
     if (
       values.firstName !== "" &&
@@ -84,6 +89,10 @@ function StudentSignup() {
             />
           </div>
           <div>
+            <label htmlFor="middleName">Middle Name (Optional): </label>
+            <Field type="text" id="middleName" name="middleName" />
+          </div>
+          <div>
             <label htmlFor="lastName">Last Name: </label>
             <Field type="text" id="lastName" name="lastName" />
             <ErrorMessage
@@ -97,6 +106,15 @@ function StudentSignup() {
             <Field type="email" id="email" name="email" />
             <ErrorMessage
               name="email"
+              component="div"
+              className="error-message"
+            />
+          </div>
+          <div>
+            <label htmlFor="phone">Phone (Optional): </label>
+            <Field type="text" id="phone" name="phone" />
+            <ErrorMessage
+              name="phone"
               component="div"
               className="error-message"
             />
