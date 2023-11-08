@@ -15,9 +15,15 @@ db.init_app(app)
 @app.route('/studentsignup', methods=['POST'])
 def studentsignup():
     try:
+        first = request.json.get('first', None)
+        last = request.json.get('last', None)
         email = request.json.get('email', None)
         password = request.json.get('password', None)
         
+        if not first:
+            return 'Missing first name', 400
+        if not last:
+            return 'Missing last name', 400
         if not email:
             return 'Missing email', 400
         if not password:
@@ -25,11 +31,11 @@ def studentsignup():
         
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        user = User(email=email, hash=hashed)
+        user = User(first=first, last=last, email=email, hash=hashed)
         db.session.add(user)
         db.session.commit()
 
-        return f'Welcome! {email}', 200
+        return f'Welcome {first}!', 200
     except IntegrityError:
         # the rollback func reverts the changes made to the db ( so if an error happens after we commited changes they will be reverted )
         db.session.rollback()
@@ -60,6 +66,8 @@ def studentlogin():
             return 'Invalid Login Info!', 400
     except AttributeError:
         return 'Provide an Email and Password in JSON format in the request body', 400
+    
+    
 
 if __name__ == '__main__':
     app.debug = True
