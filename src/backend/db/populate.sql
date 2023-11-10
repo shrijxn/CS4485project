@@ -45,3 +45,15 @@ insert into Favorite_Tutor (student_email, tutor_email)
 values ('example3@gmail.com', 'example1@gmail.com'),
 ('example3@gmail.com', 'example2@gmail.com'),
 ('example5@gmail.com', 'example6@gmail.com');
+
+insert into Schedules (t_email, s_email, subject, day, start_time, end_time)
+values ('example1@gmail.com', 'example7@gmail.com', 'Math', '11-09-2023', '1:00PM', '2:00PM');
+
+insert into Tutoring_Hours (email, hours)
+values ('example1@gmail.com', '0');
+
+insert into About_Me (email, about_me)
+values ('example1@gmail.com', 'This is me!');
+
+insert into Profile_Pic (email, picname)
+values ('example1@gmail.com', 'John.png');
