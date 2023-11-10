@@ -29,12 +29,12 @@ function TutorLogin() {
         // You can perform signup logic here
         console.log('Form data submitted:', values);
         if (values.firstName !== "" && values.lastName !== "" && values.email !== "" && values.password !== "") {
-            fetch('http://localhost:5000/api/login-tutor', {
+            fetch('http://localhost:5000/api/tutor', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ values })
+                body: JSON.stringify(values)
             }).then(response => response.text())
                 .then(data => {
                     if (data !== 'Valid') {

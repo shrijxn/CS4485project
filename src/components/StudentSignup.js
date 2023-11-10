@@ -53,12 +53,15 @@ function StudentSignup() {
       values.email !== "" &&
       values.password !== ""
     ) {
-      fetch("http://localhost:5000/api/register-student", {
+        // DEBUGGING
+        const requestBody = JSON.stringify(values);
+        console.log("POST Request Body:", requestBody);
+        fetch("http://localhost:5000/api/signupstudent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ values }),
+            body: JSON.stringify(values),
       })
         .then((response) => response.text())
         .then((data) => {

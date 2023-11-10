@@ -1,9 +1,12 @@
-from flask import Flask, request
+from flask import Flask, request, current_app
 import psycopg2
+import bcrypt
+from flask_cors import CORS
 
 # TESTING DONE IN REQBIN
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # FOR TESTING
 """
@@ -30,32 +33,30 @@ def existingemail():
     return results
 
 # SIGNUP STUDENT
-@app.route('/signupstudent', methods=['POST'])
+@app.route('/api/signupstudent', methods=['POST', 'OPTIONS'])
 def signupstudent():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
-        # ADD MIDDLE NAME TO SIGN UP, MAKE IT OPTIONAL
         signup_info = request.json
-        fname = signup_info['first_name']
-        mname = signup_info['middle_name']
-        lname = signup_info['last_name']
+        current_app.logger.info(f"Received data: {signup_info}")
+        fname = signup_info['firstName']
+        mname = signup_info.get('middleName', '')
+        lname = signup_info['lastName']
         email = signup_info['email']
         phonenum = signup_info['phone']
         password = signup_info['password']
-        # MAKE SURE TO ADD HASHED PASS CONVERSION HERE PLEASE
-        
+        hashedpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
 
     try:
-        # CHANGE PASSWORD TO HASHEDPASS AFTER ADDING
-        cursor.execute(f"INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal) values ('{email}', '{fname}','{mname}', '{lname}', 'tutor', '{phonenum}', false)")
+        cursor.execute("INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal) VALUES (%s, %s, %s, %s, 'student', %s, false)", (email, fname, mname, lname, phonenum))
         conn.commit()
-        cursor.execute(f"INSERT INTO Login (email, hashedpass) values ('{email}', '{password}')")
+        cursor.execute("INSERT INTO Login (email, hashedpass) VALUES (%s, %s)", (email, hashedpass.decode('utf-8')))
         conn.commit()
     except Exception as e:
-        print(e)
-        conn.close()
+        current_app.logger.error(e, exc_info=True)
+        # conn.close()
         return 'ERROR'
     return 'SUCCESS'
 
@@ -67,23 +68,22 @@ def signuptutor():
         # ADD MIDDLE NAME TO SIGN UP, MAKE IT OPTIONAL
         # TUTOR SIGN UP NEEDS MORE FIELDS
         signup_info = request.json
-        fname = signup_info['first_name']
-        mname = signup_info['middle_name']
-        lname = signup_info['last_name']
+        fname = signup_info['firstName']
+        mname = signup_info.get('middleName', '')
+        lname = signup_info['lastName']
         email = signup_info['email']
         phonenum = signup_info['phone']
         password = signup_info['password']
         criminal = signup_info['criminal'] # SHOULD BE TRUE/FALSE
         # MAKE SURE TO ADD HASHED PASS CONVERSION HERE PLEASE
-        
+        hashedpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
 
     try:
-        # CHANGE PASSWORD TO HASHEDPASS AFTER ADDING
-        cursor.execute(f"INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal) values ('{email}', '{fname}','{mname}', '{lname}', 'tutor', '{phonenum}', '{criminal}')")
+        cursor.execute("INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal) VALUES (%s, %s, %s, %s, 'student', %s, false)", (email, fname, mname, lname, phonenum))
         conn.commit()
-        cursor.execute(f"INSERT INTO Login (email, hashedpass) values ('{email}', '{password}')")
+        cursor.execute("INSERT INTO Login (email, hashedpass) VALUES (%s, %s)", (email, hashedpass.decode('utf-8')))
         conn.commit()
     except Exception as e:
         print(e)
@@ -103,20 +103,28 @@ def login():
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
 
-    try:
-        # Right now, tests literal hashed pass, doesn't hash pass and checks
-        cursor.execute(f"SELECT HASHEDPASS FROM LOGIN WHERE email = '{username_input}'")
-        results = cursor.fetchone()
-    except Exception as e:
-        print(e)
-        conn.close()
-        return 'ERROR'
-    if results is not None and password_input == results[0]:
-        print("LOGIN SUCCESSFUL")
-        return 'SUCCESS'
-    else:
-        print("LOGIN FAILED")
-        return 'FAIL'
+        try:
+            cursor.execute(f"SELECT hashedpass FROM Login WHERE email = '{username_input}'")
+            hashed_pass_from_db = cursor.fetchone()
+            conn.close()
+        except Exception as e:
+            print(e)
+            if conn is not None:
+                conn.close()
+            return 'ERROR'
+
+        # Check if we got a result and verify the password
+        if hashed_pass_from_db is not None:
+            # Use bcrypt to check the hashed password
+            if bcrypt.checkpw(password_input.encode('utf-8'), hashed_pass_from_db[0].encode('utf-8')):
+                print("LOGIN SUCCESSFUL")
+                return 'SUCCESS'
+            else:
+                print("LOGIN FAILED")
+                return 'FAIL'
+        else:
+            print("LOGIN FAILED - User not found")
+            return 'FAIL'
 
 # PULL TUTOR INFO
 @app.route('/tutorlist', methods=['POST'])
