@@ -1,10 +1,12 @@
 const nodemailer = require("nodemailer");
 
+
+const { AUTH_EMAIL, AUTH_PASS } = process.env;
 let transporter = nodemailer.createTransport({
     host: "smpt-mail.outlook.com",
     auth: { 
-        user: 'onlinetutor123@hotmail.com',
-        pass: 'Finalproject123',
+        user: AUTH_EMAIL,
+        pass: AUTH_PASS,
     },
     
 });
