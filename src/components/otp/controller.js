@@ -3,8 +3,38 @@ const generateOTP = require("./../../util/generateOTP");
 const sendEmail = require("./../../util/sendEmail");
 const { generatePath } = require("react-router-dom");
 const express = require("express");
+const { hashData, verifyHashedData } = require("./../../util/hashData");    
 const { AUTH_EMAIL } = process.env;
 
+const verifyOTP = async ({ email, otp }) => {
+    try {
+        if (!(email && otp)) {
+            throw Error("Provide values for email, otp");
+            email;
+        }
+
+        const matchedOTPRecord = await OTP.findOne({email,});
+
+        
+        if (!matchedOTPRecord) {
+            throw Error("No otp records found.");
+        }
+
+        const { expiresAt } = matchedOTPRecord;
+    
+       if (expiresAt < Date.now()) {
+        await OTP.deleteOne({email});
+        throw Error("Code has expired. Request for a new one.");
+       } 
+
+       const hashedOTP = matchedOTPRecord.otp;
+       const validOTP = await verifyHashedData(otp, hashedOTP);
+       return validOTP;
+    } catch (error) {
+        throw error;
+    }
+
+}
 const sendOTP = async ({ email, subject, message, duration = 1}) => {
     try {
     if (!(email && subject && message)) {
@@ -44,4 +74,13 @@ const sendOTP = async ({ email, subject, message, duration = 1}) => {
     }
 }
 
-module.exports = { sendOTP };
+
+const deleteOTP = async () => {
+    try {
+        await OTP.deleteOne({ email });
+
+    } catch (error) {
+        throw error;
+    }
+}
+module.exports = { sendOTP, verifyOTP, deleteOTP };
