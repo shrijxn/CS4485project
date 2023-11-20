@@ -1,18 +1,23 @@
 .App {
-  text-align: center;
+  text-align: right;
+  margin-right: 5px;
+  font-size: 10px;
 }
 
 .App-logo {
-  height: 600px;
-  position: absolute;
-  top: -200px;
-  left: -60px;
+  height: 140px;
+  position: fixed;
+  top: 40px;
+  left: 870px;
 }
 
 
 .error-message {
   font-size: 14px;
   color: red;
+  text-align: right;
+  margin-right: 600px;
+  margin-bottom: 20px;
 }
 
 @keyframes App-logo-bounce {
@@ -32,7 +37,6 @@
 
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -55,30 +59,123 @@
   }
 }
 
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+.back-button {
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 25px;
+  background-color: transparent;
+  border-color: white;
+  color: white;
+  height: 60px;
+  width: 110px;
+}
+
+.back-button:hover {
+  background-color: #c7b94c;
+  border-color: #c7b94c;
+  color:black;
 }
 
 .next-button {
     margin-left: auto;
+    margin-right: 600px;
+    font-size: 25px;
+    background-color: transparent;
+    border-color: white;
+    color: white;
+    height: 60px;
+    width: 110px;
+}
+
+.next-button:hover {
+  background-color: #c7b94c;
+  border-color: #c7b94c;
+  color:black;
 }
 
 @keyframes switchColor {
   0% {
-    color: #1976d2; /* Primary color */
+    color: #c7b94c; /* Primary color */
   }
   100% {
-    color: #e91e63; /* Secondary color */
+    color: #afc782; /* Secondary color */
   }
+}
+
+.header-animated-text {
+  animation: switchColor 2s infinite alternate; 
+  font-size: 2em; 
+  margin-bottom: 50px; 
+  margin-top: 70px;
+  text-align: left;
+}
+
+.header2-animated-text {
+  animation: switchColor 2s infinite alternate;
+  font-size: 1em;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .animated-text {
-  animation: switchColor 2s infinite alternate; /* Change 2s to the desired duration */
-  font-size: 1.5em; /* Adjust the size as needed */
-  margin-bottom: 20px; /* Spacing between text and buttons */
+  animation: switchColor 2s infinite alternate;
+  font-size: 0.8em;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
+.animated-text::after {
+  content: '\00a0'; /* Add Space After The Animated Text */
+}
 
+.animated-text1 {
+  animation: switchColor 2s infinite alternate;
+  font-size: 0.8em;
+  margin-bottom: 15px;
+  text-align: left;
+  margin-right: 900px;
+}
 
+.criminal-text {
+  animation: switchColor 2s infinite alternate;
+  font-size: 0.8em;
+  margin-bottom: 20px;
+  text-align: left;
+  margin-right: 10px;
+}
+
+.option-text {
+  animation: switchColor 2s infinite alternate;
+  font-size: 0.8em;
+  margin-bottom: 20px;
+  text-align: left;
+  margin-right: 650px;
+}
+
+.drop-down {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  text-align: left;
+}
+
+.elementsFormat {
+  color: white;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.formik-input {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-right: 600px;
+}
+
+.select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
