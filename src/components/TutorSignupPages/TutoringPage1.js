@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useFormikContext, Field, ErrorMessage } from "formik";
+import "../../App.css";
 
 function Page1() {
   const { errors, touched } = useFormikContext();
@@ -9,8 +10,15 @@ function Page1() {
   return (
     <div>
       <div>
-        <label htmlFor="firstName">First Name: </label>
-        <Field type="text" id="firstName" name="firstName" />
+        <label htmlFor="firstName" className="animated-text">
+          First Name{" "}
+        </label>
+        <Field
+          type="text"
+          id="firstName"
+          name="firstName"
+          className="formik-input"
+        />
         <ErrorMessage
           name="firstName"
           component="div"
@@ -18,12 +26,26 @@ function Page1() {
         />
       </div>
       <div>
-        <label htmlFor="middleName">Middle Name (Optional): </label>
-        <Field type="text" id="middleName" name="middleName" />
+        <label htmlFor="middleName" className="animated-text">
+          Middle Name (Optional){" "}
+        </label>
+        <Field
+          type="text"
+          id="middleName"
+          name="middleName"
+          className="formik-input"
+        />
       </div>
       <div>
-        <label htmlFor="lastName">Last Name: </label>
-        <Field type="text" id="lastName" name="lastName" />
+        <label htmlFor="lastName" className="animated-text">
+          Last Name{" "}
+        </label>
+        <Field
+          type="text"
+          id="lastName"
+          name="lastName"
+          className="formik-input"
+        />
         <ErrorMessage
           name="lastName"
           component="div"
@@ -31,13 +53,22 @@ function Page1() {
         />
       </div>
       <div>
-        <label htmlFor="email">Email: </label>
-        <Field type="email" id="email" name="email" />
+        <label htmlFor="email" className="animated-text">
+          Email{" "}
+        </label>
+        <Field type="email" id="email" name="email" className="formik-input" />
         <ErrorMessage name="email" component="div" className="error-message" />
       </div>
       <div>
-        <label htmlFor="password">Password: </label>
-        <Field type="password" id="password" name="password" />
+        <label htmlFor="password" className="animated-text">
+          Password{" "}
+        </label>
+        <Field
+          type="password"
+          id="password"
+          name="password"
+          className="formik-input"
+        />
         <ErrorMessage
           name="password"
           component="div"
@@ -45,8 +76,15 @@ function Page1() {
         />
       </div>
       <div>
-        <label htmlFor="confirmPassword">Re-enter Password: </label>
-        <Field type="password" id="confirmPassword" name="confirmPassword" />
+        <label htmlFor="confirmPassword" className="animated-text">
+          Confirm Password{" "}
+        </label>
+        <Field
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          className="formik-input"
+        />
         <ErrorMessage
           name="confirmPassword"
           component="div"
