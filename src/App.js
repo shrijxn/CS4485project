@@ -29,10 +29,10 @@ import { data } from "./components/Data.js";
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: "#1976d2", // Main shade of blue color
+      main: "#c7b94c", // Main shade of blue color
     },
     secondary: {
-      main: "#e91e63", // Main shade of pink color
+      main: "#afc782", // Main shade of pink color
     },
   },
 });
@@ -43,13 +43,16 @@ function App() {
       <div className="App">
         <div
           style={{
-            position: "absolute",
+            position: "fixed", // Changed from absolute to fixed
             top: 0,
             right: 0,
-            backgroundImage: `url(${require("./logo/bg.png")})`,
+            bottom: 0,
+            left: 0,
+            backgroundImage: `url(${require("./logo/bg.jpg")})`,
             backgroundSize: "cover",
-            width: "500px",
-            height: "500px",
+            width: "100%",
+            height: "100%",
+            zIndex: -1, // Added a negative z-index
           }}
         />
         <header className="App-header">
@@ -89,7 +92,7 @@ function App() {
               color: "white",
             }}
           >
-            <div style={{ fontSize: "12px" }}>
+            <div style={{ fontSize: "12px", color: "white" }}>
               Copyright C UTDallas CS 4485 Project
             </div>
             <div style={{ textAlign: "right", fontSize: "12px" }}>
@@ -117,7 +120,7 @@ function MainPage() {
   return (
     <div style={{ textAlign: "center" }}>
       {" "}
-      <div className="animated-text">Select your option below</div>
+      <div className="header2-animated-text">Select your option below</div>
       <Link
         to="/landing/Tutor"
         style={{ textDecoration: "none", marginRight: "32px" }}
@@ -132,12 +135,12 @@ function MainPage() {
           }
           variant="outlined"
           sx={{
-            color: defaultTheme.palette.primary.main,
-            borderColor: defaultTheme.palette.primary.main,
-            mr: 2,
+            color: "white",
+            borderColor: "white",
+            mr: 5,
             "&:hover": {
               backgroundColor: defaultTheme.palette.primary.main,
-              color: "#fff",
+              borderColor: defaultTheme.palette.primary.main,
             },
           }}
         >
@@ -155,11 +158,12 @@ function MainPage() {
           }
           variant="outlined"
           sx={{
-            color: defaultTheme.palette.secondary.main,
-            borderColor: defaultTheme.palette.secondary.main,
+            color: "white",
+            borderColor: "white",
+            mr: 65,
             "&:hover": {
               backgroundColor: defaultTheme.palette.secondary.main,
-              color: "#fff",
+              borderColor: defaultTheme.palette.secondary.main,
             },
           }}
         >
