@@ -1,44 +1,84 @@
 // StudentDashboard.js
 
-import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Table from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {data} from './Data.js'
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import React from "react";
+import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+import { createTheme } from "@mui/system";
+import "bootstrap/dist/css/bootstrap.min.css";
+import MyFavoritesImage from "../logo/favorite.png";
+import MyScheduleImage from "../logo/calendar.png";
 
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#c7b94c",
+    },
+    secondary: {
+      main: "#afc782",
+    },
+  },
+});
 
 function StudentDashboard() {
-
-    return (
-        <div>
-            <h3>Student Dashboard</h3>
-            <Link to="/StudentMyFavorites" style={{ textDecoration: 'none', marginRight: '16px' }}>
-                <Button
-                    style={{ backgroundColor: 'yellow', color: 'black' }}
-                >
-                    My Favorites
-                </Button>
-            </Link>
-            <Link to="/StudentMySchedule" style={{ textDecoration: 'none' }}>
-                <Button
-                    style={{ backgroundColor: 'pink', color: 'black' }}
-                >
-                    My Schedule
-                </Button>
-            </Link>
-        </div>
-    );
-
+  return (
+    <div style={{ textAlign: "center", marginTop: "20px" }}>
+      <h2 className="header-animated-text" style={{ marginRight: "450px" }}>
+        Student Dashboard
+      </h2>
+      <p className="header2-animated-text">Select your option below:</p>
+      <Link
+        to="/StudentMyFavorites"
+        style={{ textDecoration: "none", marginRight: "32px" }}
+      >
+        <Button
+          startIcon={
+            <img
+              src={MyFavoritesImage}
+              alt="My Favorites"
+              style={{ width: "80px", height: "80px" }}
+            />
+          }
+          variant="outlined"
+          sx={{
+            color: "white",
+            borderColor: "white",
+            mr: 2,
+            "&:hover": {
+              backgroundColor: defaultTheme.palette.secondary.main,
+              borderColor: defaultTheme.palette.secondary.main,
+            },
+          }}
+        >
+          My Favorites
+        </Button>
+      </Link>
+      <Link
+        to="/StudentMySchedule"
+        style={{ textDecoration: "none", marginRight: "600px" }}
+      >
+        <Button
+          endIcon={
+            <img
+              src={MyScheduleImage}
+              alt="My Schedule"
+              style={{ width: "80px", height: "80px" }}
+            />
+          }
+          variant="outlined"
+          sx={{
+            color: "white",
+            borderColor: "white",
+            "&:hover": {
+              backgroundColor: defaultTheme.palette.secondary.main,
+              borderColor: defaultTheme.palette.secondary.main,
+            },
+          }}
+        >
+          My Schedule
+        </Button>
+      </Link>
+    </div>
+  );
 }
 
-
-
-
 export default StudentDashboard;
-
