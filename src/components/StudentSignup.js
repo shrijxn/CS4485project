@@ -53,15 +53,15 @@ function StudentSignup() {
       values.email !== "" &&
       values.password !== ""
     ) {
-        // DEBUGGING
-        const requestBody = JSON.stringify(values);
-        console.log("POST Request Body:", requestBody);
-        fetch("http://localhost:5000/api/signupstudent", {
+      // DEBUGGING
+      const requestBody = JSON.stringify(values);
+      console.log("POST Request Body:", requestBody);
+      fetch("http://localhost:5000/api/signupstudent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-            body: JSON.stringify(values),
+        body: JSON.stringify(values),
       })
         .then((response) => response.text())
         .then((data) => {
@@ -75,7 +75,7 @@ function StudentSignup() {
 
   return (
     <div>
-      <h2>Student Sign up</h2>
+      <h2 className="header-animated-text">Student Sign up</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -83,8 +83,15 @@ function StudentSignup() {
       >
         <Form>
           <div>
-            <label htmlFor="firstName">First Name: </label>
-            <Field type="text" id="firstName" name="firstName" />
+            <label htmlFor="firstName" className="animated-text">
+              First Name{" "}
+            </label>
+            <Field
+              type="text"
+              id="firstName"
+              name="firstName"
+              className="formik-input"
+            />
             <ErrorMessage
               name="firstName"
               component="div"
@@ -92,12 +99,26 @@ function StudentSignup() {
             />
           </div>
           <div>
-            <label htmlFor="middleName">Middle Name (Optional): </label>
-            <Field type="text" id="middleName" name="middleName" />
+            <label htmlFor="middleName" className="animated-text">
+              Middle Name (Optional){" "}
+            </label>
+            <Field
+              type="text"
+              id="middleName"
+              name="middleName"
+              className="formik-input"
+            />
           </div>
           <div>
-            <label htmlFor="lastName">Last Name: </label>
-            <Field type="text" id="lastName" name="lastName" />
+            <label htmlFor="lastName" className="animated-text">
+              Last Name{" "}
+            </label>
+            <Field
+              type="text"
+              id="lastName"
+              name="lastName"
+              className="formik-input"
+            />
             <ErrorMessage
               name="lastName"
               component="div"
@@ -105,8 +126,15 @@ function StudentSignup() {
             />
           </div>
           <div>
-            <label htmlFor="email">Email: </label>
-            <Field type="email" id="email" name="email" />
+            <label htmlFor="email" className="animated-text">
+              Email{" "}
+            </label>
+            <Field
+              type="email"
+              id="email"
+              name="email"
+              className="formik-input"
+            />
             <ErrorMessage
               name="email"
               component="div"
@@ -114,8 +142,15 @@ function StudentSignup() {
             />
           </div>
           <div>
-            <label htmlFor="phone">Phone (Optional): </label>
-            <Field type="text" id="phone" name="phone" />
+            <label htmlFor="phone" className="animated-text">
+              Phone (Optional){" "}
+            </label>
+            <Field
+              type="text"
+              id="phone"
+              name="phone"
+              className="formik-input"
+            />
             <ErrorMessage
               name="phone"
               component="div"
@@ -123,8 +158,15 @@ function StudentSignup() {
             />
           </div>
           <div>
-            <label htmlFor="password">Password: </label>
-            <Field type="password" id="password" name="password" />
+            <label htmlFor="password" className="animated-text">
+              Password{" "}
+            </label>
+            <Field
+              type="password"
+              id="password"
+              name="password"
+              className="formik-input"
+            />
             <ErrorMessage
               name="password"
               component="div"
@@ -132,11 +174,14 @@ function StudentSignup() {
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword">Confirm Password: </label>
+            <label htmlFor="confirmPassword" className="animated-text">
+              Confirm Password{" "}
+            </label>
             <Field
               type="password"
               id="confirmPassword"
               name="confirmPassword"
+              className="formik-input"
             />
             <ErrorMessage
               name="confirmPassword"
@@ -144,7 +189,9 @@ function StudentSignup() {
               className="error-message"
             />
           </div>
-          <button type="submit">Sign up</button>
+          <button type="submit" className="next-button-student">
+            Sign up
+          </button>
         </Form>
       </Formik>
     </div>

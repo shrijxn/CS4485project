@@ -93,6 +93,23 @@
   color:black;
 }
 
+.next-button-student {
+  margin-left: auto;
+  margin-right: 600px;
+  font-size: 25px;
+  background-color: transparent;
+  border-color: white;
+  color: white;
+  height: 60px;
+  width: 110px;
+}
+
+.next-button-student:hover {
+background-color: #afc782;
+border-color: #afc782;
+color:black;
+}
+
 @keyframes switchColor {
   0% {
     color: #c7b94c; /* Primary color */
