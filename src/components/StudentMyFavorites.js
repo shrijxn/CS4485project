@@ -62,7 +62,6 @@ function StudentMyFavorites() {
     }
   };
 
-  // Reset selection when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
