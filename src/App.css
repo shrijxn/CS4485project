@@ -123,7 +123,7 @@ color:black;
   animation: switchColor 2s infinite alternate; 
   font-size: 2em; 
   margin-bottom: 50px; 
-  margin-top: -120px;
+  margin-top: 10px;
   text-align: left;
 }
 
@@ -195,4 +195,51 @@ color:black;
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+/* App.css */
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures borders are neat */
+}
+
+table, th, td {
+  border: 3px solid #c7b94c; /* Adds borders to the table, rows and cells */
+}
+
+th, td {
+  padding: 15px; /* Adds some padding for text inside table cells */
+  text-align: left;
+  font-size: 25px;
+}
+
+thead {
+  color: #000000;
+  background-color: #c7b94c;
+  text-align: left;
+}
+
+.calendar {
+  text-align: left;
+  background-color: transparent;
+}
+
+.drop-down-list {
+  text-align: left;
+}
+
+.appointment-list{
+  text-align: left;
+}
+
+.buttons{
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 25px;
+  background-color: transparent;
+  border-color: white;
+  color: white;
+  height: 60px;
+  width: 110px;
 }
