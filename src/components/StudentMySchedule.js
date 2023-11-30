@@ -1,6 +1,10 @@
 // StudentMySchedule.js
 
 import React, { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
+import { createTheme } from "@mui/system";
+import BookImage from "../logo/add.png";
+import CancelImage from "../logo/remove.png";
 
 const initialTimeSlots = [
   { value: "12am-1am", label: "12am-1am" },
@@ -28,6 +32,17 @@ const initialTimeSlots = [
   { value: "10pm-11pm", label: "10pm-11pm" },
   { value: "11pm-12am", label: "11pm-12am" },
 ];
+
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#c7b94c",
+    },
+    secondary: {
+      main: "#afc782",
+    },
+  },
+});
 
 function StudentMySchedule() {
   const [selectedDate, setSelectedDate] = useState("");
@@ -90,21 +105,42 @@ function StudentMySchedule() {
     );
   };
 
-  const getTimeSlotStatus = (timeValue, date) => {
+  const getTimeSlotStatus = (timeValue, date, tutor) => {
     const appointmentForSlot = appointments.find(
       (appointment) =>
-        appointment.time === timeValue && appointment.date === date
+        appointment.time === timeValue &&
+        appointment.date === date &&
+        appointment.student === tutor
     );
     return appointmentForSlot
       ? { active: false, label: ` (booked)` }
       : { active: true, label: "" };
   };
 
+  const buttonStyle = (isActive) => ({
+    color: isActive ? "white" : "gray",
+    borderColor: isActive ? "white" : "gray",
+    mb: 1,
+    "&:hover": isActive && {
+      backgroundColor: defaultTheme.palette.secondary.main,
+      borderColor: defaultTheme.palette.secondary.main,
+    },
+    "&.Mui-disabled": {
+      color: "gray",
+      borderColor: "gray",
+    },
+  });
+
   return (
-    <div className="tutor-calendar" style={{ marginRight: "650px" }}>
-      <h2 className="header2-animated-text" style={{ textDecoration: "none" }}>
-        Book Appointments:
-      </h2>
+    <div>
+      <div style={{ marginRight: "650px" }}>
+        <h2
+          className="header2-animated-text"
+          style={{ textDecoration: "none" }}
+        >
+          Book Appointments:
+        </h2>
+      </div>
       <div className="calendar">
         <input
           type="date"
@@ -158,7 +194,8 @@ function StudentMySchedule() {
           {initialTimeSlots.map((time) => {
             const { active, label } = getTimeSlotStatus(
               time.value,
-              selectedDate
+              selectedDate,
+              selectedStudent
             );
             return (
               <option key={time.value} value={time.value} disabled={!active}>
@@ -169,34 +206,68 @@ function StudentMySchedule() {
         </select>
       </div>
 
-      <div className="appointment-list">
-        {appointments.map((appointment, index) => (
-          <div key={index}>
-            <input
-              type="checkbox"
-              onChange={() => handleSelectForCancellation(index)}
-              checked={appointment.selectedForCancellation}
+      <div className="buttons2">
+        <Button
+          startIcon={
+            <img
+              src={BookImage}
+              alt="Book"
+              style={{ width: "30px", height: "25px" }}
             />
-            {`${appointment.date} - ${appointment.time} - ${appointment.student} - ${appointment.subject}`}
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <button
+          }
+          variant="outlined"
           onClick={bookAppointment}
           disabled={!isBookButtonActive}
-          className="buttons"
+          sx={buttonStyle(isBookButtonActive)}
         >
           Book
-        </button>
-        <button
+        </Button>
+        <Button
+          endIcon={
+            <img
+              src={CancelImage}
+              alt="Cancel"
+              style={{ width: "20px", height: "20px" }}
+            />
+          }
+          variant="outlined"
           onClick={cancelAppointment}
           disabled={!isCancelButtonActive}
-          className="buttons"
+          sx={buttonStyle(isCancelButtonActive)}
         >
           Cancel
-        </button>
+        </Button>
+      </div>
+
+      <div style={{ marginRight: "650px" }}>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Tutor</th>
+              <th>Subject</th>
+            </tr>
+          </thead>
+          <tbody>
+            {appointments.map((appointment, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="checkbox"
+                    onChange={() => handleSelectForCancellation(index)}
+                    checked={appointment.selectedForCancellation}
+                  />
+                </td>
+                <td>{appointment.date}</td>
+                <td>{appointment.time}</td>
+                <td>{appointment.student}</td>
+                <td>{appointment.subject}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
