@@ -25,9 +25,7 @@ function LandingPage() {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h2 className="header-animated-text">
-        Welcome to the {typeCapitalized} Section
-      </h2>
+      <h2 className="header-animated-text">{typeCapitalized} Section</h2>
       <p className="header2-animated-text">Select your option below:</p>
       <Link
         to={`/${type}Signup`}
