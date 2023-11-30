@@ -201,17 +201,17 @@ color:black;
 
 table {
   width: 100%;
-  border-collapse: collapse; /* Ensures borders are neat */
+  border-collapse: collapse; 
 }
 
 table, th, td {
-  border: 3px solid #c7b94c; /* Adds borders to the table, rows and cells */
+  border: 3px solid #c7b94c; 
 }
 
 th, td {
-  padding: 15px; /* Adds some padding for text inside table cells */
+  padding: 8px; 
   text-align: left;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 thead {
@@ -223,11 +223,36 @@ thead {
 .calendar {
   text-align: left;
   background-color: transparent;
+  color: black;
 }
+
+.calendar input[type="date"] {
+  background-color: #c7b94c;
+  color: black;
+  border: 1px solid #c7b94c;
+  border-radius: 4px;
+}
+
+
 
 .drop-down-list {
   text-align: left;
+  margin-top: 5px;
 }
+
+.drop-down-list select {
+  background-color: #c7b94c;
+  color: black;
+  border: 1px solid #c7b94c;
+  padding: 5px;      
+  border-radius: 4px;   
+}
+
+.drop-down-list select option {
+  background-color: black;
+  color: white;
+}
+
 
 .appointment-list{
   text-align: left;
@@ -242,4 +267,8 @@ thead {
   color: white;
   height: 60px;
   width: 110px;
+}
+
+.buttons2{
+  text-align: left;
 }
