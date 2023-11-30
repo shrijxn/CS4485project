@@ -101,7 +101,10 @@ function StudentMySchedule() {
   };
 
   return (
-    <div className="tutor-calendar">
+    <div className="tutor-calendar" style={{ marginRight: "650px" }}>
+      <h2 className="header2-animated-text" style={{ textDecoration: "none" }}>
+        Book Appointments:
+      </h2>
       <div className="calendar">
         <input
           type="date"
@@ -110,7 +113,7 @@ function StudentMySchedule() {
         />
       </div>
 
-      <div className="tutor-list">
+      <div className="drop-down-list">
         <select
           onChange={(e) => setSelectedStudent(e.target.value)}
           value={selectedStudent}
@@ -122,7 +125,7 @@ function StudentMySchedule() {
         </select>
       </div>
 
-      <div className="subject-list">
+      <div className="drop-down-list">
         <select
           onChange={(e) => setSelectedSubject(e.target.value)}
           value={selectedSubject}
@@ -146,7 +149,7 @@ function StudentMySchedule() {
         </select>
       </div>
 
-      <div className="time-list">
+      <div className="drop-down-list">
         <select
           onChange={(e) => setSelectedTime(e.target.value)}
           value={selectedTime}
@@ -179,11 +182,19 @@ function StudentMySchedule() {
         ))}
       </div>
 
-      <div className="buttons">
-        <button onClick={bookAppointment} disabled={!isBookButtonActive}>
+      <div>
+        <button
+          onClick={bookAppointment}
+          disabled={!isBookButtonActive}
+          className="buttons"
+        >
           Book
         </button>
-        <button onClick={cancelAppointment} disabled={!isCancelButtonActive}>
+        <button
+          onClick={cancelAppointment}
+          disabled={!isCancelButtonActive}
+          className="buttons"
+        >
           Cancel
         </button>
       </div>
