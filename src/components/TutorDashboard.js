@@ -11,7 +11,7 @@ function TutorDashboard() {
         Tutor Dashboard
       </h2>
       <div className="header2-animated-text" style={{ marginRight: "450px" }}>
-        Total Hours:{" "}
+        Current Appointments{" "}
       </div>
       <Link to="/TutorCalendar">
         <Icon.CalendarWeek
