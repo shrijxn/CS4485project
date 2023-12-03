@@ -38,8 +38,15 @@ function TutorSignup() {
     aboutMe: "",
   };
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values, { setSubmitting }) => {
+    let formData = new FormData();
+    Object.keys(values).forEach((key) => {
+      formData.append(key, values[key]);
+    });
     console.log("Form data submitted:", values);
+    if (values.photo) {
+      formData.append("photo", values.photo, values.photo.name);
+    }
     if (
       values.firstName !== "" &&
       values.lastName !== "" &&
@@ -96,11 +103,12 @@ function TutorSignup() {
                     type="button"
                     onClick={() => {
                       validateForm().then((errors) => {
-                        if (Object.keys(errors).length === 0) {
-                          // No errors: proceed to the next step
+                        if (
+                          Object.keys(errors).length === 0 &&
+                          !(step === 1 && !values.photo)
+                        ) {
                           setStep((s) => s + 1);
                         } else {
-                          // There are validation errors: mark all fields as touched
                           setTouched(
                             Object.keys(errors).reduce(
                               (acc, curr) => ({ ...acc, [curr]: true }),
