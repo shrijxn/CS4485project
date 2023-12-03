@@ -1,6 +1,6 @@
 // TutoringPage3.js
 
-import React, { useState } from "react"; // Import useState
+import React, { useState } from "react";
 import { useFormikContext, Field, ErrorMessage } from "formik";
 import Select from "react-select";
 
@@ -44,7 +44,8 @@ const times = [
 ];
 
 function Page3() {
-  const { errors, touched } = useFormikContext();
+  const { errors, touched, values, setFieldError, setFieldValue } =
+    useFormikContext();
 
   const customStyles = {
     option: (provided, state) => ({
@@ -71,13 +72,13 @@ function Page3() {
     }),
     menu: (provided) => ({
       ...provided,
-      background: "white", // Change background to white when open
+      background: "white",
       width: "45%",
       left: 0,
     }),
     multiValueLabel: (provided) => ({
       ...provided,
-      color: "black", // Change text color to black for selected values
+      color: "black",
     }),
   };
 
