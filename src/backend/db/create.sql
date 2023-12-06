@@ -7,8 +7,6 @@ DROP TABLE IF EXISTS Favorite_Tutor;
 DROP TABLE IF EXISTS Schedules;
 DROP TABLE IF EXISTS Profile_Pic;
 DROP TABLE IF EXISTS Tutoring_Hours;
-DROP VIEW IF EXISTS tutors;
-DROP VIEW IF EXISTS students;
 
 CREATE TABLE Person (
     email varchar(30) not null,

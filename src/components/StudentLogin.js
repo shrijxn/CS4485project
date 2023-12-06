@@ -31,8 +31,6 @@ function StudentLogin() {
     // You can perform signup logic here
     console.log("Form data submitted:", values);
     if (
-      values.firstName !== "" &&
-      values.lastName !== "" &&
       values.email !== "" &&
       values.password !== ""
     ) {

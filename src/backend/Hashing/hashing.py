@@ -6,7 +6,7 @@ from db import db
 
 app = Flask(__name__)
 #change this to absolute path of the db file in your local directory
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:\\Users\\shrij\\OneDrive\\Desktop\\Hashing\\user.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///D:\\dProgramming\\visualStudioProjects\\cs4485project\\online-tutoring-app\\src\\backend\\Hashing\\user.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
@@ -77,7 +77,7 @@ def studentlogin():
 
 
 #############################################################################################################
-#TEACHER ROUTES
+#TUTOR ROUTES
 #routing for /tutorsignup
 @app.route('/tutorsignup', methods=['POST'])
 def tutorsignup():

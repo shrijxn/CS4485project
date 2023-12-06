@@ -35,8 +35,13 @@ def existingemail():
 # SIGNUP STUDENT
 @app.route('/api/signupstudent', methods=['POST', 'OPTIONS'])
 def signupstudent():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
     if request.method == 'POST':
-        # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         signup_info = request.json
         current_app.logger.info(f"Received data: {signup_info}")
         fname = signup_info['firstName']
@@ -56,32 +61,35 @@ def signupstudent():
         conn.commit()
     except Exception as e:
         current_app.logger.error(e, exc_info=True)
-        # conn.close()
+        conn.close()
         return 'ERROR'
     return 'SUCCESS'
 
 # SIGNUP TUTOR
-@app.route('/signuptutor', methods=['POST'])
+@app.route('/api/signuptutor', methods=['POST', 'OPTIONS'])
 def signuptutor():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
     if request.method == 'POST':
-        # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
-        # ADD MIDDLE NAME TO SIGN UP, MAKE IT OPTIONAL
-        # TUTOR SIGN UP NEEDS MORE FIELDS
         signup_info = request.json
+        current_app.logger.info(f"Received data: {signup_info}")
         fname = signup_info['firstName']
         mname = signup_info.get('middleName', '')
         lname = signup_info['lastName']
         email = signup_info['email']
         phonenum = signup_info['phone']
         password = signup_info['password']
-        criminal = signup_info['criminal'] # SHOULD BE TRUE/FALSE
-        # MAKE SURE TO ADD HASHED PASS CONVERSION HERE PLEASE
+        # criminal = signup_info['criminal']
         hashedpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
 
     try:
-        cursor.execute("INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal) VALUES (%s, %s, %s, %s, 'student', %s, false)", (email, fname, mname, lname, phonenum))
+        cursor.execute("INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal) VALUES (%s, %s, %s, %s, 'tutor', %s, false)", (email, fname, mname, lname, phonenum))
         conn.commit()
         cursor.execute("INSERT INTO Login (email, hashedpass) VALUES (%s, %s)", (email, hashedpass.decode('utf-8')))
         conn.commit()
@@ -92,10 +100,15 @@ def signuptutor():
     return 'SUCCESS'
 
 # LOGIN LOGIC
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST', 'OPTIONS'])
 def login():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
     if request.method == 'POST':
-        # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         credentials = request.json
         username_input = credentials['email']
         password_input = credentials['password']
@@ -104,30 +117,36 @@ def login():
         cursor = conn.cursor()
 
         try:
-            cursor.execute(f"SELECT hashedpass FROM Login WHERE email = '{username_input}'")
-            hashed_pass_from_db = cursor.fetchone()
+            cursor.execute("SELECT hashedpass FROM Login WHERE email = %s", (username_input,))
+            result = cursor.fetchone()
             conn.close()
+
+            if result is None:
+                print("LOGIN FAILED - User not found")
+                return 'FAIL'
+
+            hashed_pass_from_db = result[0]
+            
+            if isinstance(hashed_pass_from_db, str):
+                hashed_pass_from_db = hashed_pass_from_db.encode('utf-8')
+                
+            # Check if the password is correct
+            if bcrypt.checkpw(password_input.encode('utf-8'), hashed_pass_from_db):
+                print("LOGIN SUCCESSFUL")
+                return 'SUCCESS'
+            else:
+                print("LOGIN FAILED - Incorrect password")
+                return 'FAIL'
+
         except Exception as e:
             print(e)
+            print("Error printed here")
             if conn is not None:
                 conn.close()
             return 'ERROR'
 
-        # Check if we got a result and verify the password
-        if hashed_pass_from_db is not None:
-            # Use bcrypt to check the hashed password
-            if bcrypt.checkpw(password_input.encode('utf-8'), hashed_pass_from_db[0].encode('utf-8')):
-                print("LOGIN SUCCESSFUL")
-                return 'SUCCESS'
-            else:
-                print("LOGIN FAILED")
-                return 'FAIL'
-        else:
-            print("LOGIN FAILED - User not found")
-            return 'FAIL'
-
 # PULL TUTOR INFO
-@app.route('/tutorlist', methods=['POST'])
+@app.route('/tutorlist', methods=['POST', 'OPTIONS'])
 def tutorlist():
     if request.method == 'POST':
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
@@ -143,7 +162,7 @@ def tutorlist():
     return results
 
 # PULL FAVORITE TUTORS
-@app.route('/favlist', methods=['POST'])
+@app.route('/favlist', methods=['POST', 'OPTIONS'])
 def favlist():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -163,7 +182,7 @@ def favlist():
     return results
 
 # ADD FAVORITE TUTOR
-@app.route('/addfavtutor', methods=['POST'])
+@app.route('/addfavtutor', methods=['POST', 'OPTIONS'])
 def addfavtutor():
     # Make sure students can't select and add a duplicate favorite tutor
     if request.method == 'POST':
@@ -184,7 +203,7 @@ def addfavtutor():
     return 'SUCCESS'
 
 # REMOVE FAVORITE TUTOR
-@app.route('/remfavtutor', methods=['POST'])
+@app.route('/remfavtutor', methods=['POST', 'OPTIONS'])
 def remfavtutor():
     # Make sure students can't select and add a duplicate favorite tutor
     if request.method == 'POST':
@@ -214,7 +233,7 @@ They will enter their detailed information (subject list, about me, available ho
 # NEED UPDATES FOR ABOUT ME
 
 # ADD ABOUT ME
-@app.route('/addaboutme', methods=['POST'])
+@app.route('/addaboutme', methods=['POST', 'OPTIONS'])
 def addaboutme():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -234,7 +253,7 @@ def addaboutme():
     return 'SUCCESS'
 
 # UPDATE ABOUT ME
-@app.route('/updateaboutme', methods=['POST'])
+@app.route('/updateaboutme', methods=['POST', 'OPTIONS'])
 def updateaboutme():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -254,7 +273,7 @@ def updateaboutme():
     return 'SUCCESS'
 
 # ADD A SUBJECT
-@app.route('/addsubject', methods=['POST'])
+@app.route('/addsubject', methods=['POST', 'OPTIONS'])
 def addsubject():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -274,7 +293,7 @@ def addsubject():
     return 'SUCCESS'
 
 # REMOVE SUBJECT
-@app.route('/remsubject', methods=['POST'])
+@app.route('/remsubject', methods=['POST', 'OPTIONS'])
 def remsubject():
     # Make sure students can't select and add a duplicate favorite tutor
     if request.method == 'POST':
@@ -295,7 +314,7 @@ def remsubject():
     return 'ENTRY DELETED'
 
 # ADD AVAILABLE TIMES
-@app.route('/addavailabletimes', methods=['POST'])
+@app.route('/addavailabletimes', methods=['POST', 'OPTIONS'])
 def addavailabletimes():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -322,7 +341,7 @@ REMOVE AVAILABLE TIMES
 '''
 
 # ADD PICTURE NAME (For now, assuming we already have pictures in the app folder after upload, can select pictures by their name stored in db (i.e.) "mypic.png")
-@app.route('/addpic', methods=['POST'])
+@app.route('/addpic', methods=['POST', 'OPTIONS'])
 def addpic():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -342,7 +361,7 @@ def addpic():
     return 'SUCCESS'
 
 # UPDATE PIC NAME
-@app.route('/updatepic', methods=['POST'])
+@app.route('/updatepic', methods=['POST', 'OPTIONS'])
 def updatepic():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -368,7 +387,7 @@ For making appointments, availability of the tutor should be checked (both worki
 
 # ADD APPOINTMENT
 # Don't let dupe add appointment in frontend, no db dupe protection atm
-@app.route('/addappointment', methods=['POST'])
+@app.route('/addappointment', methods=['POST', 'OPTIONS'])
 def addappointment():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -393,7 +412,7 @@ def addappointment():
 
 
 # UPDATE APPOINTMENT ONLY TEACHER SIDE THOUGH
-@app.route('/updateappointment', methods=['POST'])
+@app.route('/updateappointment', methods=['POST', 'OPTIONS'])
 def updateappointment():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -434,7 +453,7 @@ For tutors, upcoming appointments should be listed along with student, name, dat
 """
 
 # PULL APPOINTMENTS AS STUDENT
-@app.route('/studentappointments', methods=['POST'])
+@app.route('/studentappointments', methods=['POST', 'OPTIONS'])
 def studentappointments():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -454,7 +473,7 @@ def studentappointments():
     return results
 
 # PULL APPOINTMENTS AS TEACHER
-@app.route('/tutorappointments', methods=['POST'])
+@app.route('/tutorappointments', methods=['POST', 'OPTIONS'])
 def tutorappointments():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -478,7 +497,7 @@ For both users and tutors, total tutoring hours completed should be shown.
 """
 
 # ADD TOTAL HOURS
-@app.route('/addhours', methods=['POST'])
+@app.route('/addhours', methods=['POST', 'OPTIONS'])
 def addhours():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -498,7 +517,7 @@ def addhours():
     return 'SUCCESS'
 
 # UPDATE TOTAL HOURS / CAN ADD AND REMOVE
-@app.route('/updatehours', methods=['POST'])
+@app.route('/updatehours', methods=['POST', 'OPTIONS'])
 def updatehours():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW

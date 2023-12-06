@@ -32,12 +32,10 @@ function TutorLogin() {
     // You can perform signup logic here
     console.log("Form data submitted:", values);
     if (
-      values.firstName !== "" &&
-      values.lastName !== "" &&
       values.email !== "" &&
       values.password !== ""
     ) {
-      fetch("http://localhost:5000/api/tutor", {
+      fetch("http://localhost:5000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

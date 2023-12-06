@@ -39,26 +39,22 @@ function TutorSignup() {
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    let formData = new FormData();
-    Object.keys(values).forEach((key) => {
-      formData.append(key, values[key]);
-    });
     console.log("Form data submitted:", values);
-    if (values.photo) {
-      formData.append("photo", values.photo, values.photo.name);
-    }
     if (
       values.firstName !== "" &&
       values.lastName !== "" &&
       values.email !== "" &&
       values.password !== ""
     ) {
-      fetch("http://localhost:5000/api/register-tutor", {
+
+      const { aboutMe, availableHours, photo, ...filteredValues } = values;
+      console.log("Updated form data submitted:", filteredValues);
+      fetch("http://localhost:5000/api/signuptutor", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(filteredValues),
       })
         .then((response) => response.text())
         .then((data) => {

@@ -17,6 +17,7 @@ const defaultTheme = createTheme({
   },
 });
 
+
 function StudentMyFavorites() {
   // Sample database of tutors
   const tutorsDB = [
