@@ -18,7 +18,7 @@ export const Page1Validation = Yup.object({
   confirmPassword: Yup.string()
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password"), null], "Password confirmation does not match"),
-  photo: Yup.mixed().required("Profile photo is required"),
+   photo: Yup.string().required("Profile photo is required"),
 });
 
 export const Page2Validation = Yup.object({

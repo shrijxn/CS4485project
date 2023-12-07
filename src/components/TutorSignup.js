@@ -49,7 +49,7 @@ function TutorSignup() {
       values.password !== ""
     ) {
 
-      const { aboutMe, availableHours, photo, ...filteredValues } = values;
+      const { aboutMe, availableHours, ...filteredValues } = values;
       fetch("http://localhost:5000/api/signuptutor", {
         method: "POST",
         headers: {

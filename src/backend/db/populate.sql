@@ -1,15 +1,15 @@
-insert into Person (email, firstName, middleName, lastName, usertype, phonenum, criminal)
-values ('example1@gmail.com', 'Harry','Julius', 'Batch', 'tutor', '123-456-7890', 'false'),
-('example2@gmail.com', 'Emily','James', 'Squire', 'tutor', '321-654-0987', 'false'),
-('example3@gmail.com', 'Sarah','Fred', 'Nguyen', 'student', '000-000-0000', 'false'),
-('example4@gmail.com', 'Chris','Edward', 'Khan', 'tutor', '', 'false'),
-('example5@gmail.com', 'Ethan','Robert', 'Smith', 'student', '', 'false'),
-('example6@gmail.com', 'Ryan','Mekk', 'To', 'tutor', '111-111-1111', 'false'),
-('example7@gmail.com', 'Justin','Peter', 'Knox', 'tutor', '', 'false'),
-('example8@gmail.com', 'Omar','Will', 'Calliope', 'student', '222-222-2222', 'false'),
-('testFavTutor@email.com', 'Tutorman','', 'MrTutor', 'tutor', '', 'false'),
-('testFavStudent@email.com', 'Studentman','', 'MrStudent', 'student', '', 'false'),
-('example9@gmail.com', 'Kyle','David', 'Persephone', 'student', '', 'false');
+insert into Person (email, firstName, middleName, lastName, usertype, phonenum, criminal, photo)
+values ('example1@gmail.com', 'Harry','Julius', 'Batch', 'tutor', '123-456-7890', 'false', 'ship.jpg'),
+('example2@gmail.com', 'Emily','James', 'Squire', 'tutor', '321-654-0987', 'false', 'ship.jpg'),
+('example3@gmail.com', 'Sarah','Fred', 'Nguyen', 'student', '000-000-0000', 'false', 'ship.jpg'),
+('example4@gmail.com', 'Chris','Edward', 'Khan', 'tutor', '', 'false', 'ship.jpg'),
+('example5@gmail.com', 'Ethan','Robert', 'Smith', 'student', '', 'false', 'ship.jpg'),
+('example6@gmail.com', 'Ryan','Mekk', 'To', 'tutor', '111-111-1111', 'false', 'ship.jpg'),
+('example7@gmail.com', 'Justin','Peter', 'Knox', 'tutor', '', 'false', 'ship.jpg'),
+('example8@gmail.com', 'Omar','Will', 'Calliope', 'student', '222-222-2222', 'false', 'ship.jpg'),
+('testFavTutor@email.com', 'Tutorman','', 'MrTutor', 'tutor', '', 'false', 'ship.jpg'),
+('testFavStudent@email.com', 'Studentman','', 'MrStudent', 'student', '', 'false', 'mountains.jpg'),
+('example9@gmail.com', 'Kyle','David', 'Persephone', 'student', '', 'false', 'ship.jpg');
 
 /*Generic Passwords using the SHA1 Hash, password shouldn't be stored in this case. Adjustments 
 will be done once we finalize hashing and direction

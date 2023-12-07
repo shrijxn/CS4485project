@@ -1,6 +1,6 @@
 // TutoringPage1.js
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormikContext, Field, ErrorMessage } from "formik";
 import "../../App.css";
 
@@ -8,26 +8,36 @@ function Page1() {
   const { errors, touched, values, setFieldError, setFieldValue } =
     useFormikContext();
 
-  // State for image management
-  const [image, setImage] = useState(null);
-  const [imageName, setImageName] = useState("");
+  // State for predefined profile pictures
+    const [profilePictures, setProfilePictures] = useState([]);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  // Handle image change
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const newImageName = `${values.firstName}.${values.lastName}`;
-      setImageName(newImageName); // Update the image name state
-      setImage(URL.createObjectURL(e.target.files[0]));
-      setFieldValue(
-        "photo",
-        new Blob([e.target.files[0]], { type: "image/png" }),
-        newImageName
-      );
-      setFieldError("photo", ""); // Clear any previous error
-    } else {
-      setFieldError("photo", "Profile photo is required");
-    }
-  };
+  // Load profile pictures from the public folder
+  useEffect(() => {
+    setProfilePictures([
+      'city.jpg',
+      'meadow.jpg',
+      'mountains.jpg',
+      'ship.jpg',
+      'skiing.jpg'
+    ]);
+  }, []);
+
+    // Handle photo selection
+    const handlePhotoSelect = (photoName) => {
+        setFieldValue('photo', photoName);
+        setSelectedPhoto(photoName); // Update the selected photo state
+    };
+
+    // Style for the images
+    const imageStyle = (photo) => ({
+        width: '100px',
+        height: 'auto',
+        cursor: 'pointer',
+        margin: '5px',
+        border: selectedPhoto === photo ? '2px solid blue' : '1px solid gray'
+    });
+
 
   return (
     <div>
@@ -113,41 +123,26 @@ function Page1() {
           className="error-message"
         />
       </div>
-
-      {/* Image upload section */}
-      <div style={{ marginRight: "600px" }}>
-        <label htmlFor="photo" className="animated-text file-input-text">
-          Upload Photo:
-        </label>
-        <input
-          type="file"
-          id="photo"
-          name="photo"
-          accept="image/*"
-          className="file-input"
-          onChange={handleImageChange}
-        />
-        <label htmlFor="photo" className="file-input-label">
-          Choose File
-        </label>
-
-        {image && (
-          <div style={{ marginTop: "5px", marginBottom: "5px" }}>
-            <span className="file-name">{imageName}</span>{" "}
-            <img
-              src={image}
-              alt="Preview"
-              style={{
-                width: "100px",
-                height: "auto",
-                border: "1px solid white",
-              }}
-            />
+          {/* Profile picture selection section */}
+          <div style={{ textAlign: 'left' }}>
+              <label className="animated-text">Please select a profile photo:</label>
+              <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                  {profilePictures.map((photo) => (
+                      <img
+                          key={photo}
+                          src={`/ProfilePictures/${photo}`}
+                          alt={photo}
+                          style={imageStyle(photo)}
+                          onClick={() => handlePhotoSelect(photo)}
+                      />
+                  ))}
+              </div>
+              {/* Display error message if photo is not selected */}
+              {touched.photo && errors.photo && (
+                  <div className="error-message">{errors.photo}</div>
+              )}
           </div>
-        )}
-        <ErrorMessage name="photo" component="div" className="error-message" />
       </div>
-    </div>
   );
 }
 

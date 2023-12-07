@@ -1,6 +1,6 @@
 // StudentSignup.js
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,38 @@ function StudentSignup() {
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState("");
   const [imageError, setImageError] = useState("");
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+
+    // State for predefined profile pictures
+    const [profilePictures, setProfilePictures] = useState([]);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+    // Load profile pictures from the public folder
+    useEffect(() => {
+        setProfilePictures([
+            'city.jpg',
+            'meadow.jpg',
+            'mountains.jpg',
+            'ship.jpg',
+            'skiing.jpg'
+        ]);
+    }, []);
+
+    // Handle photo selection
+    const handlePhotoSelect = (photoName, setFieldValue) => {
+        console.log("Selected photo:", photoName); // Debugging log
+        setFieldValue('photo', photoName);
+        setSelectedPhoto(photoName); // Update the selected photo state
+    };
+
+    // Style for the images
+    const imageStyle = (photo) => ({
+        width: '100px',
+        height: 'auto',
+        cursor: 'pointer',
+        margin: '5px',
+        border: selectedPhoto === photo ? '2px solid blue' : '1px solid gray'
+    });
 
   const initialValues = {
     firstName: "",
@@ -22,7 +53,7 @@ function StudentSignup() {
     phone: "",
     password: "",
     confirmPassword: "",
-    imageName: "",
+    photo: "",
   };
 
   const validationSchema = Yup.object({
@@ -44,25 +75,12 @@ function StudentSignup() {
       ),
     confirmPassword: Yup.string()
       .required("Confirm Password is required")
-      .oneOf([Yup.ref("password"), null], "Passwords must match"),
+          .oneOf([Yup.ref("password"), null], "Passwords must match"),
+      photo: Yup.string().required("Profile photo is required"),
   });
 
-  const handleImageChange = (e, setFieldValue, currentValues) => {
-    if (e.target.files[0]) {
-      const newImageName = `${currentValues.firstName}.${currentValues.lastName}`;
-      setImage(URL.createObjectURL(e.target.files[0]));
-      setImageName(newImageName); // Set image name based on current firstName and lastName
-      setFieldValue("imageName", newImageName);
-      setImageError("");
-    }
-  };
   const handleLogin = (values, { setSubmitting }) => {
     console.log("Form data submitted:", values);
-    if (!image) {
-      setImageError("Profile photo is required");
-      setSubmitting(false);
-      return;
-    }
     if (
       values.firstName !== "" &&
       values.lastName !== "" &&
@@ -102,7 +120,7 @@ function StudentSignup() {
         validationSchema={validationSchema}
         onSubmit={handleLogin}
       >
-        {({ isSubmitting, setFieldValue, values }) => (
+        {({ isSubmitting, setFieldValue, values, errors, touched}) => (
           <Form>
             <div>
               <label htmlFor="firstName" className="animated-text">
@@ -212,41 +230,28 @@ function StudentSignup() {
                 component="div"
                 className="error-message"
               />
-            </div>
+                      </div>
+            {/*The rest of the forms*/}
 
-            <div style={{ marginRight: "600px" }}>
-              <label htmlFor="photo" className="animated-text file-input-text">
-                Upload Photo
-              </label>
-
-              <input
-                type="file"
-                id="photo"
-                name="photo"
-                accept="image/*"
-                className="file-input"
-                onChange={(e) => handleImageChange(e, setFieldValue, values)}
-              />
-              <label htmlFor="photo" className="file-input-label">
-                Choose File
-              </label>
-
-              {image && (
-                <div style={{ marginTop: "5px", marginBottom: "5px" }}>
-                  <span className="file-name">{imageName}</span>{" "}
-                  <img
-                    src={image}
-                    alt="Preview"
-                    style={{
-                      width: "100px",
-                      height: "auto",
-                      border: "1px solid white",
-                    }}
-                  />
-                </div>
+            {/* Profile picture selection section */}
+          <div style={{ textAlign: 'left' }}>
+              <label className="animated-text">Please select a profile photo:</label>
+              <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                  {profilePictures.map((photo) => (
+                      <img
+                          key={photo}
+                          src={`/ProfilePictures/${photo}`}
+                          alt={photo}
+                          style={imageStyle(photo)}
+                          onClick={() => handlePhotoSelect(photo, setFieldValue)}
+                      />
+                  ))}
+              </div>
+              {/* Display error message if photo is not selected */}
+              {touched.photo && errors.photo && (
+                  <div className="error-message">{errors.photo}</div>
               )}
-              {imageError && <div className="error-message">{imageError}</div>}
-            </div>
+          </div>
 
             <button
               type="submit"

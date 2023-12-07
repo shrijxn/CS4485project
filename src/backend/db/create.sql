@@ -16,6 +16,7 @@ CREATE TABLE Person (
     usertype varchar(7) not null,
     phonenum varchar(14) null,
     criminal varchar(6) not null,
+    photo varchar(30) not null,
 
     PRIMARY KEY (email)
 );

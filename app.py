@@ -50,12 +50,13 @@ def signupstudent():
         email = signup_info['email']
         phonenum = signup_info['phone']
         password = signup_info['password']
+        photo = signup_info['photo']
         hashedpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
 
     try:
-        cursor.execute("INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal) VALUES (%s, %s, %s, %s, 'student', %s, false)", (email, fname, mname, lname, phonenum))
+        cursor.execute("INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal, photo) VALUES (%s, %s, %s, %s, 'student', %s, false, %s)", (email, fname, mname, lname, phonenum, photo))
         conn.commit()
         cursor.execute("INSERT INTO Login (email, hashedpass) VALUES (%s, %s)", (email, hashedpass.decode('utf-8')))
         conn.commit()
@@ -83,13 +84,14 @@ def signuptutor():
         email = signup_info['email']
         phonenum = signup_info['phone']
         password = signup_info['password']
+        photo = signup_info['photo']
         # criminal = signup_info['criminal']
         hashedpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
 
     try:
-        cursor.execute("INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal) VALUES (%s, %s, %s, %s, 'tutor', %s, false)", (email, fname, mname, lname, phonenum))
+        cursor.execute("INSERT INTO Person (email, firstName, middleName, lastName, usertype, phonenum, criminal, photo) VALUES (%s, %s, %s, %s, 'tutor', %s, false, %s)", (email, fname, mname, lname, phonenum, photo))
         conn.commit()
         cursor.execute("INSERT INTO Login (email, hashedpass) VALUES (%s, %s)", (email, hashedpass.decode('utf-8')))
         conn.commit()
