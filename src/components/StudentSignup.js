@@ -5,8 +5,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import { useUser } from '../UserContext';
 
 function StudentSignup() {
+  const { setUser } = useUser();
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState("");
   const [imageError, setImageError] = useState("");
@@ -79,11 +81,14 @@ function StudentSignup() {
       })
         .then((response) => response.text())
         .then((data) => {
-          if (data !== "Valid") {
-            alert(data);
-          }
+            if (data !== "SUCCESS") {
+                alert(data);
+            }
+            else {
+                setUser({ email: values.email });
+                navigate("/StudentDashboard");
+            }
         });
-      navigate("/StudentDashboard");
     }
 
     setSubmitting(false);

@@ -5,8 +5,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import { useUser } from '../UserContext';
 
 function TutorLogin() {
+  const { setUser } = useUser();
   console.log("Rendering Login Component....");
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -44,11 +46,14 @@ function TutorLogin() {
       })
         .then((response) => response.text())
         .then((data) => {
-          if (data !== "Valid") {
-            alert(data);
-          }
+            if (data !== "SUCCESS") {
+                alert(data);
+            }
+            else {
+                setUser({ email: values.email });
+                navigate("/TutorDashboard");
+            }
         });
-      navigate("/TutorDashboard");
     }
   };
 

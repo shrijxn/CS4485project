@@ -5,6 +5,7 @@ import { Formik, useFormik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import { useUser } from '../UserContext';
 
 // Page components
 import Page1 from "./TutorSignupPages/TutoringPage1";
@@ -19,6 +20,7 @@ import {
 } from "./TutorSignupPages/TutoringValidation";
 
 function TutorSignup() {
+  const { setUser } = useUser();
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   const initialValues = {
@@ -48,7 +50,6 @@ function TutorSignup() {
     ) {
 
       const { aboutMe, availableHours, photo, ...filteredValues } = values;
-      console.log("Updated form data submitted:", filteredValues);
       fetch("http://localhost:5000/api/signuptutor", {
         method: "POST",
         headers: {
@@ -58,11 +59,14 @@ function TutorSignup() {
       })
         .then((response) => response.text())
         .then((data) => {
-          if (data !== "Valid") {
-            alert(data);
-          }
+            if (data !== "SUCCESS") {
+                alert(data);
+            }
+            else {
+                setUser({ email: values.email });
+                navigate("/TutorDashboard");
+            }
         });
-      navigate("/TutorDashboard");
     }
   };
 

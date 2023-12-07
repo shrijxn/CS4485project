@@ -5,8 +5,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import { useUser } from '../UserContext';
 
 function StudentLogin() {
+  const { setUser } = useUser();
   console.log("Rendering Login Component....");
   const navigate = useNavigate();
   const initialValues = {
@@ -27,7 +29,8 @@ function StudentLogin() {
       ), // Regex for the password condition
   });
 
-  const handleLogin = (values) => {
+    const handleLogin = (values) => {
+
     // You can perform signup logic here
     console.log("Form data submitted:", values);
     if (
@@ -43,11 +46,14 @@ function StudentLogin() {
       })
         .then((response) => response.text())
         .then((data) => {
-          if (data !== "Valid") {
-            alert(data);
-          }
+            if (data !== "SUCCESS") {
+                alert(data);
+            }
+            else {
+                setUser({ email: values.email });
+                navigate("/StudentDashboard");
+            }
         });
-      navigate("/StudentDashboard");
     }
   };
 

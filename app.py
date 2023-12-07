@@ -146,8 +146,14 @@ def login():
             return 'ERROR'
 
 # PULL TUTOR INFO
-@app.route('/tutorlist', methods=['POST', 'OPTIONS'])
+@app.route('/api/tutorlist', methods=['POST', 'OPTIONS'])
 def tutorlist():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
     if request.method == 'POST':
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
@@ -161,30 +167,88 @@ def tutorlist():
     # Returns a double array of tutor information
     return results
 
-# PULL FAVORITE TUTORS
-@app.route('/favlist', methods=['POST', 'OPTIONS'])
+@app.route('/api/favlist', methods=['POST', 'OPTIONS'])
 def favlist():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
     if request.method == 'POST':
-        # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         student = request.json
         student_email = student['email']
 
-        conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
+        conn = psycopg2.connect(database='Tutoring', user='postgres', password='1234', host='localhost', port='5432')
         cursor = conn.cursor()
-    try:
-        cursor.execute(f"SELECT tutor_email from Favorite_Tutor where student_email = '{student_email}'")
-        results = cursor.fetchall()
-    except Exception as e:
-        print(e)
-        conn.close()
-        return 'ERROR'
-    # Returns single array of all favorite tutors
-    return results
+
+        try:
+            # JOIN operation with Favorite_Tutor and Person tables
+            cursor.execute("""
+                SELECT f.tutor_email, p.firstName, p.lastName 
+                FROM Favorite_Tutor AS f
+                JOIN Person AS p ON f.tutor_email = p.email
+                WHERE f.student_email = %s
+            """, (student_email,))
+            results = cursor.fetchall()
+        except Exception as e:
+            print(e)
+            conn.close()
+            return 'ERROR'
+
+        # Format results into a more readable format (optional)
+        formatted_results = [{'email': tutor_email, 'firstName': first_name, 'lastName': last_name} for tutor_email, first_name, last_name in results]
+
+        return formatted_results
+
+@app.route('/api/nonfavlist', methods=['POST', 'OPTIONS'])
+def nonfavlist():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
+    if request.method == 'POST':
+        student = request.json
+        student_email = student['email']
+
+        conn = psycopg2.connect(database='Tutoring', user='postgres', password='1234', host='localhost', port='5432')
+        cursor = conn.cursor()
+
+        try:
+            # LEFT JOIN operation with Person and Favorite_Tutor tables
+            # This query selects all tutors who are not in the student's favorites
+            cursor.execute("""
+                SELECT p.email, p.firstName, p.lastName 
+                FROM Person AS p
+                LEFT JOIN Favorite_Tutor AS f ON p.email = f.tutor_email AND f.student_email = %s
+                WHERE p.usertype = 'tutor' AND f.tutor_email IS NULL
+            """, (student_email,))
+            results = cursor.fetchall()
+        except Exception as e:
+            print(e)
+            conn.close()
+            return 'ERROR'
+
+        # Format results into a more readable format (optional)
+        formatted_results = [{'email': email, 'firstName': firstName, 'lastName': lastName} for email, firstName, lastName in results]
+
+        return formatted_results
+
+    # Handle non-POST requests if necessary
+
+
 
 # ADD FAVORITE TUTOR
-@app.route('/addfavtutor', methods=['POST', 'OPTIONS'])
+@app.route('/api/addfavtutor', methods=['POST', 'OPTIONS'])
 def addfavtutor():
-    # Make sure students can't select and add a duplicate favorite tutor
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         selected = request.json
@@ -203,11 +267,15 @@ def addfavtutor():
     return 'SUCCESS'
 
 # REMOVE FAVORITE TUTOR
-@app.route('/remfavtutor', methods=['POST', 'OPTIONS'])
+@app.route('/api/remfavtutor', methods=['POST', 'OPTIONS'])
 def remfavtutor():
-    # Make sure students can't select and add a duplicate favorite tutor
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
     if request.method == 'POST':
-        # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         selected = request.json
         student_email = selected['s_email']
         tutor_email = selected['t_email']
@@ -221,7 +289,7 @@ def remfavtutor():
         print(e)
         conn.close()
         return 'ERROR'
-    return 'ENTRY DELETED'
+    return 'SUCCESS'
 
 """
 --------------------------
@@ -233,7 +301,7 @@ They will enter their detailed information (subject list, about me, available ho
 # NEED UPDATES FOR ABOUT ME
 
 # ADD ABOUT ME
-@app.route('/addaboutme', methods=['POST', 'OPTIONS'])
+@app.route('/api/addaboutme', methods=['POST', 'OPTIONS'])
 def addaboutme():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW

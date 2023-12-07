@@ -46,9 +46,10 @@ values ('example1@gmail.com', 'History'),
 ('example6@gmail.com', 'Math');
 
 insert into Favorite_Tutor (student_email, tutor_email)
-values ('example3@gmail.com', 'example1@gmail.com'),
+values ('testFavStudent@email.com', 'testFavTutor@email.com'),
 ('example3@gmail.com', 'example2@gmail.com'),
 ('example5@gmail.com', 'example6@gmail.com');
+
 
 insert into Schedules (t_email, s_email, subject, day, start_time, end_time)
 values ('example1@gmail.com', 'example7@gmail.com', 'Math', '11-09-2023', '1:00PM', '2:00PM');
