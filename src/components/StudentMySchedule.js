@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import { createTheme } from "@mui/system";
 import BookImage from "../logo/add.png";
 import CancelImage from "../logo/remove.png";
+import { useUser } from "../UserContext";
+
 
 const initialTimeSlots = [
   { value: "12am-1am", label: "12am-1am" },
@@ -52,6 +54,27 @@ function StudentMySchedule() {
   const [appointments, setAppointments] = useState([]);
   const [isBookButtonActive, setIsBookButtonActive] = useState(false);
   const [isCancelButtonActive, setIsCancelButtonActive] = useState(false);
+  const [fetchedAppointments, setFetchedAppointments] = useState([]); // WAS APPOINTMENTS AND SETAPPOINTMENTS
+  const { user } = useUser();
+
+    useEffect(() => {
+        if (user?.email) {
+            fetch("http://localhost:5000/api/getStudentAppointments", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: user.email }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setFetchedAppointments(data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching appointments:", error);
+                });
+        }
+    }, [user?.email]);
 
   useEffect(() => {
     setIsBookButtonActive(
@@ -268,7 +291,32 @@ function StudentMySchedule() {
             ))}
           </tbody>
         </table>
-      </div>
+          </div>
+          <div style={{ marginRight: "650px", marginTop: "20px" }}>
+              <h2 className="header2-animated-text" style={{ textDecoration: "none" }}>
+                  Existing Appointments:
+              </h2>
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Date</th>
+                          <th>Time</th>
+                          <th>Tutor</th>
+                          <th>Subject</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {fetchedAppointments.map((appointment, index) => (
+                          <tr key={index}>
+                              <td>{appointment.date}</td>
+                              <td>{appointment.time}</td>
+                              <td>{`${appointment.tutorFirstName} ${appointment.tutorLastName}`}</td>
+                              <td>{appointment.subject}</td>
+                          </tr>
+                      ))}
+                  </tbody>
+              </table>
+          </div>
     </div>
   );
 }

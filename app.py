@@ -1,4 +1,4 @@
-from flask import Flask, request, current_app
+from flask import Flask, request, current_app, jsonify
 import psycopg2
 import bcrypt
 from flask_cors import CORS
@@ -457,7 +457,7 @@ For making appointments, availability of the tutor should be checked (both worki
 
 # ADD APPOINTMENT
 # Don't let dupe add appointment in frontend, no db dupe protection atm
-@app.route('/addappointment', methods=['POST', 'OPTIONS'])
+@app.route('/api/addappointment', methods=['POST', 'OPTIONS'])
 def addappointment():
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
@@ -522,45 +522,103 @@ For users, upcoming appointments should be listed along with tutor name, date an
 For tutors, upcoming appointments should be listed along with student, name, date and time information.
 """
 
-# PULL APPOINTMENTS AS STUDENT
-@app.route('/studentappointments', methods=['POST', 'OPTIONS'])
-def studentappointments():
+@app.route('/api/getTutorAppointments', methods=['POST', 'OPTIONS'])
+def gettutorappointments():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
+
     if request.method == 'POST':
-        # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         schedule = request.json
         email = schedule['email']
 
-        conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
+        # Database connection
+        conn = psycopg2.connect(database='Tutoring', user='postgres', password='1234', host='localhost', port='5432')
         cursor = conn.cursor()
-    try:
-        cursor.execute(f"SELECT * from Schedules where s_email = '{email}'")
-        results = cursor.fetchall()
-    except Exception as e:
-        print(e)
-        conn.close()
-        return 'ERROR'
-    # Returns array(s) of all appointment details
-    return results
 
-# PULL APPOINTMENTS AS TEACHER
-@app.route('/tutorappointments', methods=['POST', 'OPTIONS'])
-def tutorappointments():
+        try:
+            # SQL query to join Schedules and Person tables
+            query = """
+            SELECT Schedules.date, Schedules.time, Schedules.subject, Person.firstName, Person.lastName 
+            FROM Schedules 
+            JOIN Person ON Schedules.s_email = Person.email 
+            WHERE Schedules.t_email = %s
+            """
+            cursor.execute(query, (email,))
+            results = cursor.fetchall()
+
+            # Formatting the result into a dict
+            appointments = [
+                {
+                    "date": result[0],
+                    "time": result[1],
+                    "subject": result[2],
+                    "studentFirstName": result[3],
+                    "studentLastName": result[4]
+                } for result in results
+            ]
+
+            conn.close()
+            return jsonify(appointments)  # jsonify to return JSON response
+
+        except Exception as e:
+            print(e)
+            conn.close()
+            return 'ERROR', 500
+
+
+@app.route('/api/getStudentAppointments', methods=['POST', 'OPTIONS'])
+def getstudentappointments():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
+
     if request.method == 'POST':
-        # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         schedule = request.json
         email = schedule['email']
 
-        conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
+        # Database connection
+        conn = psycopg2.connect(database='Tutoring', user='postgres', password='1234', host='localhost', port='5432')
         cursor = conn.cursor()
-    try:
-        cursor.execute(f"SELECT * from Schedules where t_email = '{email}'")
-        results = cursor.fetchall()
-    except Exception as e:
-        print(e)
-        conn.close()
-        return 'ERROR'
-    # Returns array(s) of all appointment details
-    return results
+
+        try:
+            query = """
+            SELECT Schedules.date, Schedules.time, Schedules.subject, Person.firstName, Person.lastName 
+            FROM Schedules 
+            JOIN Person ON Schedules.t_email = Person.email 
+            WHERE Schedules.s_email = %s
+            """
+            cursor.execute(query, (email,))
+            results = cursor.fetchall()
+
+            print("Fetched Results:", results)  # Debugging: Log the fetched results
+
+
+            # Formatting the result into a dict
+            appointments = [
+                {
+                    "date": result[0],
+                    "time": result[1],
+                    "subject": result[2],
+                    "tutorFirstName": result[3],
+                    "tutorLastName": result[4]
+                } for result in results
+            ]
+
+            conn.close()
+            return jsonify(appointments)  # jsonify to return JSON response
+
+        except Exception as e:
+            print(e)
+            conn.close()
+            return 'ERROR', 500
+
 
 """
 For both users and tutors, total tutoring hours completed should be shown.

@@ -68,9 +68,8 @@ CREATE TABLE Schedules (
 	t_email varchar(30) not null,
 	s_email	varchar(30) not null,
 	subject varchar(30) not null,
-	day varchar(10) not null,
-	start_time varchar(10) not null,
-	end_time varchar(10) not null,
+	date varchar(10) not null,
+	time varchar(20) not null,
 
 	FOREIGN KEY (t_email) REFERENCES Person (email),
 	FOREIGN KEY (s_email) REFERENCES Person (email)
