@@ -543,8 +543,8 @@ def addappointment():
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
         return response
+
     if request.method == 'POST':
-        # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         selected = request.json
         t_email = selected['tutorEmail']
         s_email = selected['studentEmail']
@@ -552,16 +552,67 @@ def addappointment():
         date = selected['date']
         time = selected['time']
 
-        conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
+        conn = psycopg2.connect(database='Tutoring', user='postgres', password='1234', host='localhost', port='5432')
         cursor = conn.cursor()
-    try:
-        cursor.execute(f"INSERT INTO Schedules (t_email, s_email, subject, date, time) values ('{t_email}', '{s_email}', '{subject}', '{date}', '{time}')")
-        conn.commit()
-    except Exception as e:
-        print(e)
-        conn.close()
-        return 'ERROR'
-    return 'SUCCESS'
+
+        try:
+            # Insert into Schedules
+            cursor.execute(f"INSERT INTO Schedules (t_email, s_email, subject, date, time) VALUES ('{t_email}', '{s_email}', '{subject}', '{date}', '{time}')")
+            conn.commit()
+
+            # Function to update or insert hours
+            def update_or_insert_hours(email):
+                cursor.execute(f"SELECT hours FROM Tutoring_Hours WHERE email = '{email}'")
+                result = cursor.fetchone()
+                if result:
+                    # Increment hours if email exists
+                    cursor.execute(f"UPDATE Tutoring_Hours SET hours = hours + 1 WHERE email = '{email}'")
+                else:
+                    # Insert new email with 1 hour if it does not exist
+                    cursor.execute(f"INSERT INTO Tutoring_Hours (email, hours) VALUES ('{email}', 1)")
+                conn.commit()
+
+            # Update/Insert hours for tutor and student
+            update_or_insert_hours(t_email)
+            update_or_insert_hours(s_email)
+
+        except Exception as e:
+            print(e)
+            conn.close()
+            return 'ERROR'
+
+        return 'SUCCESS'
+
+@app.route('/api/gettutoringhours', methods=['POST'])
+def get_tutoring_hours():
+    if request.method == 'POST':
+        selected = request.json
+        email = selected['email']
+
+        conn = psycopg2.connect(database='Tutoring', user='postgres', password='1234', host='localhost', port='5432')
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute(f"SELECT hours FROM Tutoring_Hours WHERE email = '{email}'")
+            result = cursor.fetchone()
+            if result:
+                # Return the number of hours if the email exists
+                return {'email': email, 'hours': result[0]}
+            else:
+                # Return 0 if the email does not exist
+                return {'email': email, 'hours': 0}
+
+        except Exception as e:
+            print(e)
+            conn.close()
+            return 'ERROR', 500
+
+        finally:
+            if conn:
+                conn.close()
+
+    return 'Invalid Request', 400
+
 
 
 # UPDATE APPOINTMENT ONLY TEACHER SIDE THOUGH

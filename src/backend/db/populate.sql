@@ -63,9 +63,9 @@ values('testFavTutor@email.com', '2am-3am'),
 ('testFavTutor@email.com', '5pm-6pm');
 
 insert into Tutoring_Hours (email, hours)
-values ('example1@gmail.com', '0'),
-('testFavStudent@email.com', '6',
-('testFavTutor@email.com', '10');
+values ('example1@gmail.com', 0),
+('testFavStudent@email.com', 6),
+('testFavTutor@email.com', 10);
 
 insert into About_Me (email, about_me)
 values ('example1@gmail.com', 'This is me!');

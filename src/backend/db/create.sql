@@ -84,7 +84,7 @@ CREATE TABLE Favorite_Tutor (
 
 CREATE TABLE Tutoring_Hours (
 	email varchar(30) not null,
-	hours varchar(10) not null,
+	hours int not null,
 	
 	PRIMARY KEY (email),
 	FOREIGN KEY (email) REFERENCES Person(email)
