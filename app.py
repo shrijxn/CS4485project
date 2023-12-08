@@ -537,20 +537,25 @@ For making appointments, availability of the tutor should be checked (both worki
 # Don't let dupe add appointment in frontend, no db dupe protection atm
 @app.route('/api/addappointment', methods=['POST', 'OPTIONS'])
 def addappointment():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
     if request.method == 'POST':
         # PLEASE FORMAT FRONTEND DATA PACKETS INTO JSON SO IT FITS BELOW
         selected = request.json
-        t_email = selected['t_email']
-        s_email = selected['s_email']
+        t_email = selected['tutorEmail']
+        s_email = selected['studentEmail']
         subject = selected['subject']
-        day = selected['day']
-        start_time = selected['start_time']
-        end_time = selected['end_time']
+        date = selected['date']
+        time = selected['time']
 
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
     try:
-        cursor.execute(f"INSERT INTO Schedules (t_email, s_email, subject, day, start_time, end_time) values ('{t_email}', '{s_email}', '{subject}', '{day}', '{start_time}', '{end_time}')")
+        cursor.execute(f"INSERT INTO Schedules (t_email, s_email, subject, date, time) values ('{t_email}', '{s_email}', '{subject}', '{date}', '{time}')")
         conn.commit()
     except Exception as e:
         print(e)
