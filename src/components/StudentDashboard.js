@@ -26,7 +26,7 @@ function StudentDashboard() {
 
   useEffect(() => {
     if (user?.email) {
-      fetch("http://localhost:5000/api/gettutoringhours", {
+      fetch("https://slaaks-ca0a6bd25a1e.herokuapp.com/api/gettutoringhours", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
