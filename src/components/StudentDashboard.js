@@ -20,38 +20,43 @@ const defaultTheme = createTheme({
   },
 });
 
-
-
-
 function StudentDashboard() {
-    const { user } = useUser(); // Retrieve user data
-    const [tutoringHours, setTutoringHours] = useState(0);
+  const { user } = useUser(); // Retrieve user data
+  const [tutoringHours, setTutoringHours] = useState(0);
 
+  useEffect(() => {
+    if (user?.email) {
+      fetch("http://localhost:5000/api/gettutoringhours", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: user.email }),
+      })
+        .then((response) => response.json())
+        .then((data) => setTutoringHours(data.hours))
+        .catch((error) => console.error("Error:", error));
+    }
+  }, [user]);
 
-
-    useEffect(() => {
-        if (user?.email) {
-            fetch('http://localhost:5000/api/gettutoringhours', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: user.email }),
-            })
-                .then(response => response.json())
-                .then(data => setTutoringHours(data.hours))
-                .catch(error => console.error('Error:', error));
-        }
-    }, [user]);
-
-    return (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginRight: '450px', marginLeft: '20px' }}>
-                <h2 className="header-animated-text">Student Dashboard</h2>
-                <div style={{ textAlign: 'right' }}>
-                    <p style={{ color: "#c7b94c" }}>Tutoring hours: {tutoringHours}</p> {/* Display the tutoring hours */}
-                </div>
-            </div>
+  return (
+    <div style={{ textAlign: "center", marginTop: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginRight: "450px",
+          marginLeft: "20px",
+        }}
+      >
+        <h2 className="header-animated-text">Student Dashboard</h2>
+      </div>
+      <div>
+        <h2 className="header2-animated-text">
+          Tutoring hours: {tutoringHours}
+        </h2>
+      </div>
       <p className="header2-animated-text">Select your option below:</p>
       <Link
         to="/StudentMyFavorites"
