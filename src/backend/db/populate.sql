@@ -54,6 +54,14 @@ values ('testFavStudent@email.com', 'testFavTutor@email.com'),
 insert into Schedules (t_email, s_email, subject, date, time)
 values ('testFavTutor@email.com', 'testFavStudent@email.com', 'Math', '11-09-2023', '1:00PM-2:00PM');
 
+insert into Subject_List(email, classname)
+values('testFavTutor@email.com', 'Math'),
+('testFavTutor@email.com', 'Biology');
+
+insert into Tutor_Availability(email, times)
+values('testFavTutor@email.com', '2am-3am'),
+('testFavTutor@email.com', '5pm-6pm');
+
 insert into Tutoring_Hours (email, hours)
 values ('example1@gmail.com', '0');
 

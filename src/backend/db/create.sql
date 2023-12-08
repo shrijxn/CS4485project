@@ -31,11 +31,11 @@ CREATE TABLE Login (
 );
 
 CREATE TABLE Subject_List (
-	email varchar(30) not null,
-	classname varchar(30) not null,
-	
-	FOREIGN KEY (email) REFERENCES Person (email)
-	ON DELETE CASCADE ON UPDATE CASCADE
+    email varchar(30) not null,
+    classname varchar(30) not null,
+    PRIMARY KEY (email, classname),
+    FOREIGN KEY (email) REFERENCES Person (email)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE About_Me (
@@ -46,16 +46,13 @@ CREATE TABLE About_Me (
 	FOREIGN KEY (email) REFERENCES Person (email)
 );
 
---Place holder for now, quite complex so might need so updates
 CREATE TABLE Tutor_Availability (
-	email varchar(30) not null,
-	--parse each day individually for now, will figure out more elegant solution
-	days varchar(50) not null,
-	--not sure how time would work, will update as we figure something out
-	times varchar(50) not null,
-	
-	FOREIGN KEY (email) REFERENCES Person (email)
+    email varchar(30) not null,
+    times varchar(50) not null,
+    FOREIGN KEY (email) REFERENCES Person (email)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 CREATE TABLE Profile_Pic (
 	email varchar(30) not null,

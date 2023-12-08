@@ -85,7 +85,9 @@ def signuptutor():
         phonenum = signup_info['phone']
         password = signup_info['password']
         photo = signup_info['photo']
-        # criminal = signup_info['criminal']
+        available_hours = [time_slot['label'] for time_slot in signup_info['availableHours']]
+        criminal = signup_info['criminalRecord']
+        subjects = [subject['label'] for subject in signup_info['subjects']]
         hashedpass = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
         cursor = conn.cursor()
@@ -95,6 +97,14 @@ def signuptutor():
         conn.commit()
         cursor.execute("INSERT INTO Login (email, hashedpass) VALUES (%s, %s)", (email, hashedpass.decode('utf-8')))
         conn.commit()
+        
+        #insert subjects
+        for subject in subjects:
+            cursor.execute("INSERT INTO Subject_List (email, classname) VALUES (%s, %s)", (email, subject))
+            conn.commit()
+        for time_slot in available_hours:
+            cursor.execute("INSERT INTO Tutor_Availability (email, times) VALUES (%s, %s)", (email, time_slot))
+            conn.commit()
     except Exception as e:
         print(e)
         conn.close()
@@ -147,27 +157,95 @@ def login():
                 conn.close()
             return 'ERROR'
 
-# PULL TUTOR INFO
-@app.route('/api/tutorlist', methods=['POST', 'OPTIONS'])
-def tutorlist():
+@app.route('/api/getpersondetails', methods=['GET', 'OPTIONS'])
+def get_person_details():
     if request.method == 'OPTIONS':
         response = app.response_class()
         response.headers.add('Access-Control-Allow-Origin', '*')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
         return response
-    if request.method == 'POST':
-        conn = psycopg2.connect(database = 'Tutoring', user = 'postgres', password = '1234', host = 'localhost', port = '5432')
-        cursor = conn.cursor()
+    email = request.args.get('email')
+    if not email:
+        return 'Email is required', 400
+
+    conn = psycopg2.connect(database='Tutoring', user='postgres', password='1234', host='localhost', port='5432')
+    cursor = conn.cursor()
+
     try:
-        cursor.execute(f"SELECT person.email, person.firstName, person.middleName, person.lastName, subject_list.classname FROM person JOIN subject_list ON person.email = subject_list.email")
-        results = cursor.fetchall()
+        cursor.execute("SELECT firstName, lastName, photo FROM Person WHERE email=%s", (email,))
+        result = cursor.fetchone()
+        if result:
+            first_name, last_name, photo = result
+            person_details = {
+                "firstName": first_name,
+                "lastName": last_name,
+                "photo": photo
+            }
+            return jsonify(person_details)
+        else:
+            return 'Person not found', 404
+
+    except Exception as e:
+        current_app.logger.error(e, exc_info=True)
+        conn.close()
+        return 'ERROR', 500
+
+    finally:
+        conn.close()
+
+
+#Pull tutor list with names, subjects, hours
+@app.route('/api/tutorlistwithsubjects', methods=['GET', 'OPTIONS'])
+def tutor_list_with_subjects():
+    if request.method == 'OPTIONS':
+        response = app.response_class()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
+    conn = psycopg2.connect(database='Tutoring', user='postgres', password='1234', host='localhost', port='5432')
+    cursor = conn.cursor()
+
+    try:
+        # Query to get all tutors
+        cursor.execute("SELECT email, firstName, lastName FROM Person WHERE usertype='tutor'")
+        tutors = cursor.fetchall()
+
+        # Prepare the list to hold tutor details
+        tutor_details = []
+
+        for tutor in tutors:
+            email, first_name, last_name = tutor
+
+            # Query to get the subjects for the tutor
+            cursor.execute("SELECT classname FROM Subject_List WHERE email=%s", (email,))
+            subjects = cursor.fetchall()
+            subjects = [subject[0] for subject in subjects] if subjects else [""]
+
+            # Query to get available hours for the tutor
+            cursor.execute("SELECT times FROM Tutor_Availability WHERE email=%s", (email,))
+            hours = cursor.fetchall()
+            hours = [hour[0] for hour in hours] if hours else [""]
+
+            # Add the tutor's details to the list
+            tutor_details.append({
+                "email": email,
+                "firstName": first_name,
+                "lastName": last_name,
+                "subjects": subjects,
+                "availableHours": hours
+            })
+
     except Exception as e:
         print(e)
         conn.close()
-        return 'ERROR'
-    # Returns a double array of tutor information
-    return results
+        return "ERROR"
+
+    conn.close()
+    return jsonify(tutor_details)
+
+
 
 @app.route('/api/favlist', methods=['POST', 'OPTIONS'])
 def favlist():
