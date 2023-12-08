@@ -90,7 +90,7 @@ function StudentSignup() {
       // DEBUGGING
       const requestBody = JSON.stringify(values);
       console.log("POST Request Body:", requestBody);
-      fetch("http://localhost:5000/api/signupstudent", {
+      fetch("https://slaaks-ca0a6bd25a1e.herokuapp.com/api/signupstudent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
